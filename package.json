@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "TS_NODE_COMPILER_OPTIONS='{ \"lib\": [ \"es2015\" ] }' mocha --require ts-node/register src/file.spec.ts"
+    "test": "TS_NODE_COMPILER_OPTIONS='{ \"lib\": [ \"es2015\" ] }' nyc --reporter=html mocha --require ts-node/register/type-check src/file.spec.ts"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
     "mock-fs": "^4.7.0",
+    "nyc": "^13.1.0",
     "ts-node": "^7.0.1",
     "typescript": "^3.2.2"
   }
