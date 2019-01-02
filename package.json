@@ -1,0 +1,31 @@
+{
+  "name": "aria-fs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "TS_NODE_COMPILER_OPTIONS='{ \"lib\": [ \"es2015\" ] }' mocha --require ts-node/register src/file.spec.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aelbore/aria-fs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aelbore/aria-fs/issues"
+  },
+  "homepage": "https://github.com/aelbore/aria-fs#readme",
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "@types/mock-fs": "^3.6.30",
+    "@types/node": "^10.12.18",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "mock-fs": "^4.7.0",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.2"
+  }
+}
