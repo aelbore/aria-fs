@@ -7,7 +7,7 @@ import { expect } from 'chai';
 
 import { globFiles, mkdirp } from './file';
 
-describe('File', () => {
+describe('globFiles', () => {
 
   beforeEach(() => {
     mock({
@@ -31,7 +31,6 @@ describe('File', () => {
 
   afterEach(() => {
     mock.restore();
-    sinon.restore();
   })
 
   it('should list all files in src directory', async () => {
@@ -58,6 +57,13 @@ describe('File', () => {
     for (let value of actual) {
       expect(files.indexOf(value)).not.equal(-1);
     }
+  })
+
+})
+
+describe('mkdirp', () => {
+  afterEach(() => {
+    sinon.restore();
   })
 
   it('should create .tmp directory.', () => {
