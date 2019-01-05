@@ -8,7 +8,6 @@ import { expect } from 'chai';
 import { globFiles, mkdirp } from './file';
 
 describe('globFiles', () => {
-
   beforeEach(() => {
     mock({
       'src/app': {
@@ -18,7 +17,7 @@ describe('globFiles', () => {
         'index.ts': `export * from './app.element';`,
         'package.json': ''
       },
-      'src/elements/input': {
+      'src/elements/input/src': {
         "index.ts": "export * from './input.element';",
         "input.element.ts": `export class ARInputElement extends HTMLElement { }`,
         "input.element.html": `<div class="ar-form-group ar-material-inputs"></div>`,
@@ -31,6 +30,11 @@ describe('globFiles', () => {
 
   afterEach(() => {
     mock.restore();
+  })
+
+  it('should list all files in `src/elements/input` directory (not recursive).', async () => {
+    const files = await globFiles('src/elements/input/*');
+    expect(files.length).equal(1);
   })
 
   it('should list all files in src directory', async () => {
@@ -47,7 +51,7 @@ describe('globFiles', () => {
     const appDir = [ `app.element.ts`, `index.ts` ]
       .map(file => path.resolve(`src/app/${file}`));
     const elementsDir = [ "index.ts", "input.element.ts", "input.element.spec.ts" ]
-      .map(file => path.resolve(`src/elements/input/${file}`));
+      .map(file => path.resolve(`src/elements/input/src/${file}`));
 
     const actual = appDir.concat(elementsDir);
 
@@ -71,6 +75,13 @@ describe('mkdirp', () => {
     mkdirp('.tmp');
 
     expect(mkdirSyncStub.called).to.true;
+  })
+
+  it('should create multiple folders.', () => {
+    const mkdirSyncStub = sinon.stub(fs, 'mkdirSync');
+    mkdirp('.tmp/elements/input');
+
+    expect(mkdirSyncStub.callCount).equal(3);
   })
 
   it('should not create existing directory.', () => {
