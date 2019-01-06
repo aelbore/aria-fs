@@ -22,7 +22,8 @@ const MOCK_DIR_AND_FILES = {
     "input.element.scss": `:host { }`,
     "input.element.spec.ts": "import './input.element';"
   },
-  "src/elements/input/package.json": `{ "name": "input" }`
+  "src/elements/input/package.json": `{ "name": "input" }`,
+  "to-be-delete-folder": { }
 }
 
 describe('globFiles', () => {
@@ -65,6 +66,12 @@ describe('globFiles', () => {
     }
   })
 
+  it('should delete folder.', async () => {
+    await clean('to-be-delete-folder');
+
+    expect(fs.existsSync('to-be-delete-folder')).to.false;
+  })
+
 })
 
 describe('mkdirp', () => {
@@ -94,4 +101,3 @@ describe('mkdirp', () => {
   })
 
 })
-
