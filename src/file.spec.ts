@@ -100,12 +100,15 @@ describe('clean', () => {
   })
 
   it('should delete folder.', async () => {
-    const existsSyncStub = sinon.stub(fs, 'existsSync').returns(true);
-    const rmdirAsyncStub = sinon.stub(fsAsync, 'rmdirAsync');
+    const existsSyncStub = sinon.stub(fs, 'existsSync').returns(true)
+    const rmdirAsyncStub = sinon.stub(fsAsync, 'rmdirAsync')
+    const readdirAsyncStub = sinon.stub(fsAsync, 'readdirAsync').resolves([]);
+    
     await clean('to-be-delete-folder');
 
     expect(existsSyncStub.called).to.true;
     expect(rmdirAsyncStub.called).to.true;
+    expect(readdirAsyncStub.called).to.true;
   })
 
 })
