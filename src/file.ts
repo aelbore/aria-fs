@@ -5,7 +5,10 @@ import * as util from 'util';
 const minimatch = require('minimatch');
 
 const readdirAsync = util.promisify(fs.readdir);
+const rmdirAsync = util.promisify(fs.rmdir);
 const statAsync = util.promisify(fs.stat);
+const lstatAsync = util.promisify(fs.lstat);
+const unlinkAsync = util.promisify(fs.unlink);
 
 interface GlobFileOptions {
   dir: string;
@@ -53,6 +56,23 @@ async function globFiles(src: string | string[]): Promise<string[]> {
   .then(results => results.join(',').split(','))
 }
 
+async function clean(dir: string) {
+  if (fs.existsSync(dir)) {
+    const rootFolder = path.resolve() + path.sep;
+    const files = await readdirAsync(dir);
+    await Promise.all(files.map(async file => {
+      const p = path.join(dir, file);
+      const stat = await lstatAsync(p);
+      if (stat.isDirectory()) {
+        await clean(p);
+      } else {
+        await unlinkAsync(p);
+      }
+    }))
+    await rmdirAsync(dir);
+  }
+}
+
 function mkdirp(directory: string) {
   const dirPath = path.resolve(directory).replace(/\/$/, '').split(path.sep);
   for (let i = 1; i <= dirPath.length; i++) {
@@ -63,4 +83,4 @@ function mkdirp(directory: string) {
   }
 }
 
-export { globFiles, mkdirp }
+export { globFiles, mkdirp, clean }
