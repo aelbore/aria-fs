@@ -14,7 +14,7 @@ const MOCK_DIR_AND_FILES = {
     "index.ts": `export * from './app.element';`,
     "package.json": ''
   },
-  'src/elements/input/src': {
+  'src/elements/isnput/src': {
     "index.ts": "export * from './input.element';",
     "input.element.ts": `export class ARInputElement extends HTMLElement { }`,
     "input.element.html": `<div class="ar-form-group ar-material-inputs"></div>`,

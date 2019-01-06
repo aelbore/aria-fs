@@ -95,34 +95,3 @@ describe('mkdirp', () => {
 
 })
 
-describe('clean', () => {
-  beforeEach(() => {
-    mock({ 
-      ...MOCK_DIR_AND_FILES,
-      "to-be-delete-folder": { }
-    });
-  })
-
-  afterEach(() => {
-    mock.restore()
-  })
-
-  it('should delete folder.', async () => {
-    await clean('to-be-delete-folder');
-
-    expect(fs.existsSync('to-be-delete-folder')).to.false;
-  })
-
-  it('should delete folders and files recursive.', async () => {
-    await clean('src');
-
-    expect(fs.existsSync(path.resolve('src/app/app.element.ts'))).to.false;
-    expect(fs.existsSync(path.resolve('src/app/app.element.html'))).to.false;
-    expect(fs.existsSync(path.resolve('src/app/app.element.scss'))).to.false;
-    expect(fs.existsSync(path.resolve('src/app/index.ts'))).to.false;
-    expect(fs.existsSync(path.resolve('src/app/package.json'))).to.false;
-    expect(fs.existsSync(path.resolve('src/app'))).to.false;
-    expect(fs.existsSync(path.resolve('src'))).to.false;
-  })
-
-})
