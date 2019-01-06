@@ -2,6 +2,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as util from 'util';
 
+import * as fsAsync from './file-async';
+
 const minimatch = require('minimatch');
 
 const readdirAsync = util.promisify(fs.readdir);
@@ -63,4 +65,10 @@ function mkdirp(directory: string) {
   }
 }
 
-export { globFiles, mkdirp }
+async function clean(dir: string) {
+  if (fs.existsSync(dir)) {
+    await fsAsync.rmdirAsync(dir);
+  }
+}
+
+export { globFiles, mkdirp, clean }
