@@ -3,9 +3,10 @@ import * as fs from 'fs';
 import * as mock from 'mock-fs';
 import * as sinon from 'sinon';
 
-import { expect } from 'chai';
+import * as fsAsync from './file-async';
 
-import { globFiles, mkdirp } from './file';
+import { expect } from 'chai';
+import { globFiles, mkdirp, clean } from './file';
 
 describe('globFiles', () => {
 
@@ -78,6 +79,22 @@ describe('mkdirp', () => {
     mkdirp('src');
     
     expect(mkdirSyncStub.notCalled).to.true;
+  })
+
+})
+
+describe('clean', () => {
+  afterEach(() => {
+    sinon.restore()
+  })
+
+  it('should delete folder.', async () => {
+    const existsSyncStub = sinon.stub(fs, 'existsSync').returns(true);
+    const rmdirAsyncStub = sinon.stub(fsAsync, 'rmdirAsync');
+    await clean('to-be-delete-folder');
+
+    expect(existsSyncStub.called).to.true;
+    expect(rmdirAsyncStub.called).to.true;
   })
 
 })
