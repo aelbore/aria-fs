@@ -105,7 +105,6 @@ describe('clean', () => {
 
   afterEach(() => {
     mock.restore()
-    sinon.restore()
   })
 
   it('should delete folder.', async () => {
