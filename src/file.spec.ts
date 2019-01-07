@@ -26,7 +26,8 @@ describe('File', () => {
         "input.element.scss": `:host { }`,
         "input.element.spec.ts": "import './input.element';"
       },
-      "src/elements/input/package.json": `{ "name": "input" }`
+      "src/elements/input/package.json": `{ "name": "input" }`,
+      "to-be-delete-folder": { }
     })
   })
 
@@ -64,6 +65,14 @@ describe('File', () => {
       for (let value of actual) {
         expect(files.indexOf(value)).not.equal(-1);
       }
+    })
+  })
+
+  describe('clean', () => {  
+    it('should delete folder.', async () => {
+      await clean('to-be-delete-folder');
+  
+      expect(fs.existsSync("to-be-delete-folder")).to.false;
     })
   })
 
