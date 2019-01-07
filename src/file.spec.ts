@@ -99,13 +99,26 @@ describe('mkdirp', () => {
 describe('clean', () => {
   beforeEach(() => {
     mock({
-      ...MOCK_DATA_DIRS,
-      "to-be-delete-folder": { }
+      "to-be-delete-folder": { },
+      "recursive-folder/src": {
+        "sub-dir": {
+          "sub-dir-file.ts": ""
+        },
+        "file.ts": ""
+      }
     })
   })
 
   afterEach(() => {
     mock.restore()
+    sinon.restore()
+  })
+
+  it('should folder not exist.', async () => {
+    const existFileStub = sinon.stub(fs, 'existsSync').returns(false);
+    await clean('folder-not-exist');
+
+    expect(existFileStub.called).to.true;
   })
 
   it('should delete folder.', async () => {    
@@ -113,6 +126,19 @@ describe('clean', () => {
     
     mock.restore()
     expect(fs.existsSync("to-be-delete-folder")).to.false;
+  })
+
+  it('should delete files and folders (recursive).', async () => {
+    const rootFolder = 'recursive-folder';
+
+    await clean(rootFolder)
+    mock.restore()
+
+    expect(fs.existsSync(path.join(rootFolder, 'src', 'sub-dir', 'sub-dir-file.ts'))).to.false
+    expect(fs.existsSync(path.join(rootFolder, 'src', 'sub-dir'))).to.false
+    expect(fs.existsSync(path.join(rootFolder, 'src', 'file.ts'))).to.false
+    expect(fs.existsSync(path.join(rootFolder, 'src'))).to.false
+    expect(fs.existsSync(rootFolder)).to.false
   })
 
 })
