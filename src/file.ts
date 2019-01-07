@@ -1,7 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import * as util from 'util';
 
-import * as fsAsync from './file-async';
+const readdirAsync = util.promisify(fs.readdir);
+const rmdirAsync = util.promisify(fs.rmdir);
+const statAsync = util.promisify(fs.stat);
+const lstatAsync = util.promisify(fs.lstat);
+const unlinkAsync = util.promisify(fs.unlink);
 
 const minimatch = require('minimatch');
 
@@ -13,10 +18,10 @@ interface GlobFileOptions {
 
 async function walkAsync(options: GlobFileOptions): Promise<string[]> {
   const rootDir = path.resolve(options.dir);
-  const directories = await fsAsync.readdirAsync(options.dir);
+  const directories = await readdirAsync(options.dir);
   return Promise.all(directories.map(async directory => {
     const files: string[] = [], result = path.join(rootDir, directory)
-    const stats = await fsAsync.statAsync(result);
+    const stats = await statAsync(result);
     if (stats.isDirectory() && options.isRecursive) {
       const values = await walkAsync({
         dir: result,
@@ -63,17 +68,17 @@ function mkdirp(directory: string) {
 
 async function clean(dir: string) {
   if (fs.existsSync(dir)) {
-    const files = await fsAsync.readdirAsync(dir);
+    const files = await readdirAsync(dir);
     await Promise.all(files.map(async file => {
       const p = path.join(dir, file);
-      const stat = await fsAsync.lstatAsync(p);
+      const stat = await lstatAsync(p);
       if (stat.isDirectory()) {
         await clean(p)
       } else {
-        fsAsync.unlinkAsync(p)
+        unlinkAsync(p)
       }
     }))
-    await fsAsync.rmdirAsync(dir);
+    await rmdirAsync(dir);
   }
 }
 
