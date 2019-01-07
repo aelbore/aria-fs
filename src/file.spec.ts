@@ -104,8 +104,8 @@ describe('clean', () => {
     })
   })
 
-  afterEach(() => {
-    mockFs.restore();
+  afterEach(async () => {
+    await mockFs.restore();
   })
 
   it('should delete folder.', async () => {
