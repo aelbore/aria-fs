@@ -71,7 +71,8 @@ describe('File', () => {
   describe('clean', () => {  
     it('should delete folder.', async () => {
       await clean('to-be-delete-folder');
-  
+      
+      mock.restore();
       expect(fs.existsSync("to-be-delete-folder")).to.false;
     })
   })
