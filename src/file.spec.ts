@@ -8,29 +8,31 @@ import * as fsAsync from './file-async';
 import { expect } from 'chai';
 import { globFiles, mkdirp, clean } from './file';
 
+const MOCK_DATA_DIRS = {
+  "src/app": {
+    "app.element.ts": `import { CustomElement } from 'custom-elements-ts';`,
+    "app.element.html": `<div class="container"></div>`,
+    "app.element.scss": `:host { }`,
+    "index.ts": `export * from './app.element';`,
+    "package.json": ''
+  },
+  'src/elements/input/src': {
+    "index.ts": "export * from './input.element';",
+    "input.element.ts": `export class ARInputElement extends HTMLElement { }`,
+    "input.element.html": `<div class="ar-form-group ar-material-inputs"></div>`,
+    "input.element.scss": `:host { }`,
+    "input.element.spec.ts": "import './input.element';"
+  },
+  "src/elements/input/package.json": `{ "name": "input" }`
+}
+
 describe('globFiles', () => {
   beforeEach(() => {
-    mock({
-      'src/app': {
-        'app.element.ts': `import { CustomElement } from 'custom-elements-ts';`,
-        'app.element.html': `<div class="container"></div>`,
-        'app.element.scss': `:host { }`,
-        'index.ts': `export * from './app.element';`,
-        'package.json': ''
-      },
-      'src/elements/input/src': {
-        "index.ts": "export * from './input.element';",
-        "input.element.ts": `export class ARInputElement extends HTMLElement { }`,
-        "input.element.html": `<div class="ar-form-group ar-material-inputs"></div>`,
-        "input.element.scss": `:host { }`,
-        "input.element.spec.ts": "import './input.element';"
-      },
-      "src/elements/input/package.json": `{ "name": "input" }`
-    })
+    mock(MOCK_DATA_DIRS)
   })
 
   afterEach(() => {
-    mock.restore();
+    mock.restore()
   })
 
   it('should list all files in `src/elements/input` directory (not recursive).', async () => {
@@ -95,20 +97,22 @@ describe('mkdirp', () => {
 })
 
 describe('clean', () => {
-  afterEach(() => {
-    sinon.restore()
+  beforeEach(() => {
+    mock({
+      ...MOCK_DATA_DIRS,
+      "to-be-delete-folder": { }
+    })
   })
 
-  it('should delete folder.', async () => {
-    const existsSyncStub = sinon.stub(fs, 'existsSync').returns(true)
-    const rmdirAsyncStub = sinon.stub(fsAsync, 'rmdirAsync')
-    const readdirAsyncStub = sinon.stub(fsAsync, 'readdirAsync').resolves([]);
-    
-    await clean('to-be-delete-folder');
+  afterEach(() => {
+    mock.restore()
+  })
 
-    expect(existsSyncStub.called).to.true;
-    expect(rmdirAsyncStub.called).to.true;
-    expect(readdirAsyncStub.called).to.true;
+  it('should delete folder.', async () => {    
+    await clean('to-be-delete-folder');
+    
+    mock.restore()
+    expect(fs.existsSync("to-be-delete-folder")).to.false;
   })
 
 })
