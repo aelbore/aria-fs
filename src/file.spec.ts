@@ -8,7 +8,8 @@ import * as fsAsync from './file-async';
 import { expect } from 'chai';
 import { globFiles, mkdirp, clean } from './file';
 
-describe('globFiles', () => {
+describe('File', () => {
+
   beforeEach(() => {
     mock({
       'src/app': {
@@ -33,85 +34,37 @@ describe('globFiles', () => {
     mock.restore();
   })
 
-  it('should list all files in `src/elements/input` directory (not recursive).', async () => {
-    const files = await globFiles('src/elements/input/*');
-    expect(files.length).equal(1);
-  })
-
-  it('should list all files in src directory', async () => {
-    const files = await globFiles('src/**/*');
-    expect(files.length).equal(11);
-  })
-
-  it('should list all .html and .scss files.', async () => {
-    const files = await globFiles([ 'src/**/*.html', 'src/**/*.scss' ]);
-    expect(files.length).equal(4);
-  })
-
-  it('should list all .ts files', async () => {
-    const appDir = [ `app.element.ts`, `index.ts` ]
-      .map(file => path.resolve(`src/app/${file}`));
-    const elementsDir = [ "index.ts", "input.element.ts", "input.element.spec.ts" ]
-      .map(file => path.resolve(`src/elements/input/src/${file}`));
-
-    const actual = appDir.concat(elementsDir);
-
-    const files = await globFiles('src/**/*.ts');
-    
-    expect(files.length).equal(actual.length);
-    for (let value of actual) {
-      expect(files.indexOf(value)).not.equal(-1);
-    }
-  })
-
-})
-
-describe('mkdirp', () => {
-  afterEach(() => {
-    sinon.restore();
-  })
-
-  it('should create .tmp directory.', () => {
-    const mkdirSyncStub = sinon.stub(fs, 'mkdirSync');
-    mkdirp('.tmp');
-
-    expect(mkdirSyncStub.called).to.true;
-  })
-
-  it('should create multiple folders.', () => {
-    const mkdirSyncStub = sinon.stub(fs, 'mkdirSync');
-    mkdirp('.tmp/elements/input');
-
-    expect(mkdirSyncStub.callCount).equal(3);
-  })
-
-  it('should not create existing directory.', () => {
-    const mkdirSyncStub = sinon.stub(fs, 'mkdirSync');
-    mkdirp('src');
-    
-    expect(mkdirSyncStub.notCalled).to.true;
-  })
-
-})
-
-describe('clean', () => {
-  let mockFs;
-  
-  beforeEach(async () => {
-    mockFs = await import('mock-fs');
-    mockFs({
-      "to-be-delete-folder": { }
+  describe('globFiles', () => {
+    it('should list all files in `src/elements/input` directory (not recursive).', async () => {
+      const files = await globFiles('src/elements/input/*');
+      expect(files.length).equal(1);
     })
-  })
-
-  afterEach(async () => {
-    await mockFs.restore();
-  })
-
-  it('should delete folder.', async () => {
-    await clean('to-be-delete-folder');
-
-    expect(fs.existsSync("to-be-delete-folder")).to.false;
+  
+    it('should list all files in src directory', async () => {
+      const files = await globFiles('src/**/*');
+      expect(files.length).equal(11);
+    })
+  
+    it('should list all .html and .scss files.', async () => {
+      const files = await globFiles([ 'src/**/*.html', 'src/**/*.scss' ]);
+      expect(files.length).equal(4);
+    })
+  
+    it('should list all .ts files', async () => {
+      const appDir = [ `app.element.ts`, `index.ts` ]
+        .map(file => path.resolve(`src/app/${file}`));
+      const elementsDir = [ "index.ts", "input.element.ts", "input.element.spec.ts" ]
+        .map(file => path.resolve(`src/elements/input/src/${file}`));
+  
+      const actual = appDir.concat(elementsDir);
+  
+      const files = await globFiles('src/**/*.ts');
+      
+      expect(files.length).equal(actual.length);
+      for (let value of actual) {
+        expect(files.indexOf(value)).not.equal(-1);
+      }
+    })
   })
 
 })
