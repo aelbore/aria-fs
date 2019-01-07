@@ -51,7 +51,7 @@ async function globFiles(src: string | string[]): Promise<string[]> {
   .then(results => results.join(',').split(','))
 }
 
-function mkdirp(directory: string) {
+function mkdirp(directory: string): void {
   const dirPath = path.resolve(directory).replace(/\/$/, '').split(path.sep);
   for (let i = 1; i <= dirPath.length; i++) {
     const segment = dirPath.slice(0, i).join(path.sep);
@@ -61,7 +61,7 @@ function mkdirp(directory: string) {
   }
 }
 
-async function clean(dir: string) {
+async function clean(dir: string): Promise<void> {
   if (fs.existsSync(dir)) {
     const files = await fsAsync.readdirAsync(dir);
     await Promise.all(files.map(async file => {

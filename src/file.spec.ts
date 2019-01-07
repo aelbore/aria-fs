@@ -95,20 +95,23 @@ describe('mkdirp', () => {
 })
 
 describe('clean', () => {
+  let mockFs;
+  
+  beforeEach(async () => {
+    mockFs = await import('mock-fs');
+    mockFs({
+      "to-be-delete-folder": { }
+    })
+  })
+
   afterEach(() => {
-    sinon.restore()
+    mockFs.restore();
   })
 
   it('should delete folder.', async () => {
-    const existsSyncStub = sinon.stub(fs, 'existsSync').returns(true)
-    const rmdirAsyncStub = sinon.stub(fsAsync, 'rmdirAsync')
-    const readdirAsyncStub = sinon.stub(fsAsync, 'readdirAsync').resolves([]);
-    
     await clean('to-be-delete-folder');
 
-    expect(existsSyncStub.called).to.true;
-    expect(rmdirAsyncStub.called).to.true;
-    expect(readdirAsyncStub.called).to.true;
+    expect(fs.existsSync("to-be-delete-folder")).to.false;
   })
 
 })
