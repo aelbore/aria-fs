@@ -3,8 +3,6 @@ import * as fs from 'fs';
 import * as mock from 'mock-fs';
 import * as sinon from 'sinon';
 
-import * as fsAsync from './file-async';
-
 import { expect } from 'chai';
 import { globFiles, mkdirp, clean } from './file';
 
