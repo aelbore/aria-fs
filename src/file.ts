@@ -7,6 +7,7 @@ const rmdirAsync = util.promisify(fs.rmdir);
 const statAsync = util.promisify(fs.stat);
 const lstatAsync = util.promisify(fs.lstat);
 const unlinkAsync = util.promisify(fs.unlink);
+const copyFileAsync = util.promisify(fs.copyFile);
 
 const minimatch = require('minimatch');
 
@@ -56,13 +57,16 @@ async function globFiles(src: string | string[]): Promise<string[]> {
   .then(results => results.join(',').split(','))
 }
 
-// async function copyFiles(src: string | string[], destRootDir: string) {
-//   return globFiles(src).then(files => {
-//     return Promise.all(files.map(file => {
-        
-//     }))
-//   });
-// }
+async function copyFiles(src: string | string[], destRootDir: string) {
+  return globFiles(src).then(files => {
+    return Promise.all(files.map(file => {
+      const srcRootDir = file.replace(path.resolve() + path.sep, '').split(path.sep)[0];
+      const destPath = file.replace(srcRootDir, destRootDir);
+      mkdirp(path.dirname(destPath));
+      return copyFileAsync(file, destPath);
+    }))
+  });
+}
 
 function mkdirp(directory: string): void {
   const dirPath = path.resolve(directory).replace(/\/$/, '').split(path.sep);
@@ -90,4 +94,4 @@ async function clean(dir: string): Promise<void> {
   }
 }
 
-export { globFiles, mkdirp, clean }
+export { globFiles, mkdirp, clean, copyFiles }
