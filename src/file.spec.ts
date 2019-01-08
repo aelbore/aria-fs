@@ -167,17 +167,8 @@ describe('copyFiles', () => {
     const destRootDir = ".tmp";
 
     await copyFiles([ 'src/elements/**/*.ts', 'src/elements/**/*.json' ], destRootDir);
-
-    const files = [
-      '.tmp/elements/input/src/index.ts',
-      '.tmp/elements/input/src/input.element.ts',
-      '.tmp/elements/input/src/input.element.spec.ts',
-      '.tmp/elements/input/package.json'
-    ]
     
-    for (const file of files) {
-      expect(fs.existsSync(file)).to.true;
-    }
+    expect(fs.existsSync('.tmp/elements/input/src/index.ts')).to.true;
   })
 
 })
