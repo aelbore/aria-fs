@@ -148,7 +148,8 @@ describe('copyFiles', () => {
       "copy-files-dir": {
         "package.json": ""
       },
-      "dest-folder": { }
+      "dest-folder": { },
+      ".tmp": { }
     })
   })
 
@@ -162,7 +163,7 @@ describe('copyFiles', () => {
     expect(fs.existsSync('dest-folder/package.json')).to.true
   })
 
-  it('should copy multiple files to non existing dest (recursive).', async () => {
+  it('should copy multiple files (recursive).', async () => {
     const destRootDir = ".tmp";
 
     await copyFiles([ 'src/elements/**/*.ts', 'src/elements/**/*.json' ], destRootDir);
@@ -173,8 +174,7 @@ describe('copyFiles', () => {
       '.tmp/elements/input/src/input.element.spec.ts',
       '.tmp/elements/input/package.json'
     ]
-      
-    expect(fs.existsSync(destRootDir)).to.true
+    
     for (const file of files) {
       expect(fs.existsSync(file)).to.true;
     }
