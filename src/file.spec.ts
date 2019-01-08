@@ -149,7 +149,13 @@ describe('copyFiles', () => {
         "package.json": ""
       },
       "dest-folder": { },
-      ".tmp": { }
+      ".tmp": { 
+        "elements": {
+          "input": {
+            "src": { }
+          }
+        }
+      }
     })
   })
 
