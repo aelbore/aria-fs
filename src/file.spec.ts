@@ -6,6 +6,8 @@ import * as sinon from 'sinon';
 import { expect } from 'chai';
 import { globFiles, mkdirp, clean } from './file';
 
+import { promisify } from 'util';
+
 const MOCK_DATA_DIRS = {
   "src/app": {
     "app.element.ts": `import { CustomElement } from 'custom-elements-ts';`,
@@ -137,6 +139,36 @@ describe('clean', () => {
     expect(fs.existsSync(path.join(rootFolder, 'src', 'file.ts'))).to.false
     expect(fs.existsSync(path.join(rootFolder, 'src'))).to.false
     expect(fs.existsSync(rootFolder)).to.false
+  })
+
+})
+
+describe('copyFiles', () => {
+
+  beforeEach(() => {
+    mock({
+      ...MOCK_DATA_DIRS,
+      "copy-files-dir": {
+        "package.json": ""
+      },
+      "dest-folder": { }
+    })
+  })
+
+  afterEach(() => {
+    mock.restore()
+  })
+
+
+  it('should copy files.', async () => {
+    const copyAsync = promisify(fs.copyFile);
+
+    const src = path.resolve('copy-files-dir/package.json');
+    const dest = path.resolve('dest-folder/package.json');
+
+    await copyAsync(src, dest);
+
+    expect(fs.existsSync(dest)).to.true
   })
 
 })
