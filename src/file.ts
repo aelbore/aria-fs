@@ -7,6 +7,7 @@ const rmdirAsync = util.promisify(fs.rmdir);
 const statAsync = util.promisify(fs.stat);
 const lstatAsync = util.promisify(fs.lstat);
 const unlinkAsync = util.promisify(fs.unlink);
+const copyFileAsync = util.promisify(fs.copyFile);
 
 const minimatch = require('minimatch');
 
@@ -56,17 +57,7 @@ async function globFiles(src: string | string[]): Promise<string[]> {
   .then(results => results.join(',').split(','))
 }
 
-function mkdirp(directory: string) {
-  const dirPath = path.resolve(directory).replace(/\/$/, '').split(path.sep);
-  for (let i = 1; i <= dirPath.length; i++) {
-    const segment = dirPath.slice(0, i).join(path.sep);
-    if (!fs.existsSync(segment) && segment.length > 0) {
-      fs.mkdirSync(segment);
-    }
-  }
-}
-
-async function clean(dir: string) {
+async function clean(dir: string): Promise<void> {
   if (fs.existsSync(dir)) {
     const files = await readdirAsync(dir);
     await Promise.all(files.map(async file => {
@@ -82,4 +73,25 @@ async function clean(dir: string) {
   }
 }
 
-export { globFiles, mkdirp, clean }
+async function copyFiles(src: string | string[], destRootDir: string): Promise<void[]> {
+  return globFiles(src).then(files => {
+    return Promise.all(files.map(file => {
+      const srcRootDir = file.replace(path.resolve() + path.sep, '').split(path.sep)[0];
+      const destPath = file.replace(srcRootDir, destRootDir);
+      mkdirp(path.dirname(destPath));
+      return copyFileAsync(file, destPath);
+    }))
+  });
+}
+
+function mkdirp(directory: string): void {
+  const dirPath = path.resolve(directory).replace(/\/$/, '').split(path.sep);
+  for (let i = 1; i <= dirPath.length; i++) {
+    const segment = dirPath.slice(0, i).join(path.sep);
+    if (!fs.existsSync(segment) && segment.length > 0) {
+      fs.mkdirSync(segment);
+    }
+  }
+}
+
+export { globFiles, mkdirp, clean, copyFiles }

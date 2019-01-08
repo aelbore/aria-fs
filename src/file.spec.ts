@@ -4,7 +4,7 @@ import * as mock from 'mock-fs';
 import * as sinon from 'sinon';
 
 import { expect } from 'chai';
-import { globFiles, mkdirp, clean } from './file';
+import { globFiles, mkdirp, clean, copyFiles } from './file';
 
 const MOCK_DATA_DIRS = {
   "src/app": {
@@ -139,4 +139,50 @@ describe('clean', () => {
     expect(fs.existsSync(rootFolder)).to.false
   })
 
+})
+
+describe('copyFiles', () => {
+  beforeEach(() => {
+    mock({
+      ...MOCK_DATA_DIRS,
+      "copy-files-dir": {
+        "package.json": ""
+      },
+      "dest-folder": { },
+      ".tmp": { 
+        "elements": {
+          "input": {
+            "src": { }
+          }
+        }
+      }
+    })
+  })
+
+  afterEach(() => {
+    mock.restore()
+  })
+
+  it('should copy files.', async () => {
+    await copyFiles('copy-files-dir/*', 'dest-folder');
+
+    expect(fs.existsSync('dest-folder/package.json')).to.true
+  })
+
+  it('should copy multiple files (recursive).', async () => {
+    const destRootDir = ".tmp";
+
+    await copyFiles([ 'src/elements/**/*.ts', 'src/elements/**/*.json' ], destRootDir);
+    
+    const files = [
+      ".tmp/elements/input/src/index.ts",
+      ".tmp/elements/input/src/input.element.ts",
+      ".tmp/elements/input/src/input.element.spec.ts",
+      ".tmp/elements/input/package.json"
+    ]
+
+    for (const file of files) {
+      expect(fs.existsSync(file)).to.true;
+    }
+  })
 })
