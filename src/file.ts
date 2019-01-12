@@ -2,14 +2,14 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as util from 'util';
 
+const minimatch = require('minimatch');
+
 const readdirAsync = util.promisify(fs.readdir);
 const rmdirAsync = util.promisify(fs.rmdir);
 const statAsync = util.promisify(fs.stat);
 const lstatAsync = util.promisify(fs.lstat);
 const unlinkAsync = util.promisify(fs.unlink);
 const copyFileAsync = util.promisify(fs.copyFile);
-
-const minimatch = require('minimatch');
 
 interface GlobFileOptions {
   dir: string;
