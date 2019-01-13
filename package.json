@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "ts-node -O '{ \"module\": \"commonjs\", \"lib\": [ \"es2015\" ] }' build.ts",
-    "test": "TS_NODE_COMPILER_OPTIONS='{ \"lib\": [ \"es2015\" ] }' nyc --reporter=html mocha --require ts-node/register/type-check src/file.spec.ts"
+    "test": "TS_NODE_COMPILER_OPTIONS='{ \"lib\": [ \"es2015\" ] }' nyc --reporter=lcov --reporter=html mocha --require ts-node/register/type-check src/file.spec.ts"
   },
   "repository": {
     "type": "git",
@@ -37,5 +37,27 @@
   },
   "dependencies": {
     "minimatch": "^3.0.4"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "lines": 50,
+    "functions": 50,
+    "branches": 50,
+    "exclude": [
+      "**/*.d.ts",
+      "src/**/*.spec.ts"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "require": [
+      "ts-node/register/type-check",
+      "source-map-support/register"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "cache": true,
+    "all": true
   }
 }
