@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "ts-node -O '{ \"module\": \"commonjs\", \"lib\": [ \"es2015\" ] }' build.ts",
-    "test": "TS_NODE_COMPILER_OPTIONS='{ \"lib\": [ \"es2015\" ] }' nyc --reporter=html mocha --require ts-node/register/type-check src/file.spec.ts"
+    "test": "TS_NODE_COMPILER_OPTIONS='{ \"lib\": [ \"es2015\" ] }' nyc --reporter=lcov --reporter=text-summary mocha --require ts-node/register/type-check src/file.spec.ts",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "@types/node": "^10.12.18",
     "@types/sinon": "^7.0.3",
     "chai": "^4.2.0",
+    "coveralls": "^3.0.2",
     "mocha": "^5.2.0",
     "mock-fs": "^4.7.0",
     "nyc": "^13.1.0",
@@ -37,5 +39,27 @@
   },
   "dependencies": {
     "minimatch": "^3.0.4"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "lines": 50,
+    "functions": 50,
+    "branches": 50,
+    "exclude": [
+      "**/*.d.ts",
+      "src/**/*.spec.ts"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "require": [
+      "ts-node/register/type-check",
+      "source-map-support/register"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "cache": true,
+    "all": true
   }
 }
