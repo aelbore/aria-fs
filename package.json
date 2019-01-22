@@ -2,7 +2,8 @@
   "name": "aria-fs",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "aria-fs.js",
+  "module": "aria-fs.es.js",
   "scripts": {
     "build": "ts-node -O '{ \"module\": \"commonjs\", \"lib\": [ \"es2015\" ] }' build.ts",
     "test": "TS_NODE_COMPILER_OPTIONS='{ \"lib\": [ \"es2015\" ] }' nyc --reporter=lcov --reporter=text-summary mocha --require ts-node/register/type-check src/file.spec.ts",
@@ -27,6 +28,7 @@
     "@types/sinon": "^7.0.3",
     "chai": "^4.2.0",
     "coveralls": "^3.0.2",
+    "magic-string": "^0.25.1",
     "mocha": "^5.2.0",
     "mock-fs": "^4.7.0",
     "nyc": "^13.1.0",
