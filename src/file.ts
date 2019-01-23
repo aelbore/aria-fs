@@ -10,11 +10,18 @@ const statAsync = util.promisify(fs.stat);
 const lstatAsync = util.promisify(fs.lstat);
 const unlinkAsync = util.promisify(fs.unlink);
 const copyFileAsync = util.promisify(fs.copyFile);
+const symlinkAsync = util.promisify(fs.symlink);
 
 interface GlobFileOptions {
   dir: string;
   isRecursive: boolean;
   pattern: string;
+}
+
+enum LINK_TYPE {
+  FILE = 'file',
+  DIR = 'dir',
+  JUNCTION = 'junction'
 }
 
 async function walkAsync(options: GlobFileOptions): Promise<string[]> {
@@ -84,6 +91,13 @@ async function copyFiles(src: string | string[], destRootDir: string): Promise<v
   });
 }
 
+async function symlinkDir(src: string, dest: string, type = LINK_TYPE.DIR): Promise<void> {
+  return ((fs.existsSync(dest) && fs.statSync(dest).isDirectory())
+    ? (path.resolve(fs.readlinkSync(dest)) === src) ? unlinkAsync(dest): clean(dest)
+    : Promise.resolve()
+  ).then(() => symlinkAsync(src, dest, (process.platform === 'win32') ? LINK_TYPE.JUNCTION: type))
+}
+
 function mkdirp(directory: string): void {
   const dirPath = path.resolve(directory).replace(/\/$/, '').split(path.sep);
   for (let i = 1; i <= dirPath.length; i++) {
@@ -94,4 +108,4 @@ function mkdirp(directory: string): void {
   }
 }
 
-export { globFiles, mkdirp, clean, copyFiles }
+export { globFiles, mkdirp, clean, copyFiles, symlinkDir }
