@@ -27,6 +27,7 @@
     "@types/sinon": "^7.0.3",
     "chai": "^4.2.0",
     "coveralls": "^3.0.2",
+    "magic-string": "^0.25.1",
     "mocha": "^5.2.0",
     "mock-fs": "^4.7.0",
     "nyc": "^13.1.0",
