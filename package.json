@@ -20,6 +20,7 @@
     "url": "https://github.com/aelbore/aria-fs/issues"
   },
   "homepage": "https://github.com/aelbore/aria-fs#readme",
+  "typings": "aria-fs.d.ts",
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.5",
