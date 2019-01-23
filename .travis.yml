@@ -9,6 +9,6 @@ branches:
 install: 
   - npm install
 script:
-  - npm run build && npm test
+  - npm test
 after_success:
   - npm run coveralls
