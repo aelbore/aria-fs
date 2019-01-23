@@ -67,6 +67,7 @@ async function copyPackageFile() {
   const pkg = require(`./${FILE_NAME}`);
   delete pkg.scripts;
   delete pkg.devDependencies;
+  delete pkg.nyc;
   return writeFileAsync(`dist/${FILE_NAME}`, JSON.stringify(pkg, null, 2))
 }
 
