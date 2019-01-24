@@ -4,7 +4,7 @@ import * as mock from 'mock-fs';
 import * as sinon from 'sinon';
 
 import { expect } from 'chai';
-import { globFiles, mkdirp, clean, copyFiles } from './file';
+import { globFiles, mkdirp, clean, copyFiles, symlinkDir } from './file';
 
 const MOCK_DATA_DIRS = {
   "src/app": {
@@ -185,4 +185,33 @@ describe('copyFiles', () => {
       expect(fs.existsSync(file)).to.true;
     }
   })
+})
+
+describe('symlink', () => {
+
+  beforeEach(async () => {
+    await Promise.all([ mkdirp('.tmp/dir'), mkdirp('dest/dir') ])
+  })
+
+  afterEach(async() => {
+    await Promise.all([ clean('.tmp'), clean('dest') ])
+  })
+
+  it('should link source directory to dest directory.', async() => {
+    await symlinkDir('.tmp/dir', 'dest/dir/a-symlink');
+
+    expect(path.resolve(fs.readlinkSync('dest/dir/a-symlink')))
+      .equal(path.resolve('.tmp/dir'))
+  })
+
+  it('should unlink the existing symlink, then create symlink', async() => {
+    const src = '.tmp/dir', dest = 'dest/dir/a-symlink';
+
+    await symlinkDir(src, dest);
+    await symlinkDir(src, dest);
+
+    expect(path.resolve(fs.readlinkSync('dest/dir/a-symlink')))
+      .equal(path.resolve('.tmp/dir'))
+  })
+
 })

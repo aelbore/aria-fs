@@ -10,11 +10,18 @@ const statAsync = util.promisify(fs.stat);
 const lstatAsync = util.promisify(fs.lstat);
 const unlinkAsync = util.promisify(fs.unlink);
 const copyFileAsync = util.promisify(fs.copyFile);
+const symlinkAsync = util.promisify(fs.symlink);
 
 interface GlobFileOptions {
   dir: string;
   isRecursive: boolean;
   pattern: string;
+}
+
+enum LINK_TYPE {
+  FILE = 'file',
+  DIR = 'dir',
+  JUNCTION = 'junction'
 }
 
 async function walkAsync(options: GlobFileOptions): Promise<string[]> {
@@ -84,6 +91,21 @@ async function copyFiles(src: string | string[], destRootDir: string): Promise<v
   });
 }
 
+/**
+ * Create symbolic link of directory
+ * @param src - source directory
+ * @param dest - destination directory
+ * @param type - (process.platform === 'win32') should be LINK_TYPE.JUNCTION
+ */
+async function symlinkDir(src: string, dest: string, type = LINK_TYPE.DIR): Promise<void> {
+  const source = path.resolve(src), destination = path.resolve(dest);
+  return ((fs.existsSync(destination) && fs.statSync(destination).isDirectory())
+    ? (path.resolve(fs.readlinkSync(destination)) === source) 
+      ? unlinkAsync(destination): clean(destination)
+    : Promise.resolve()
+  ).then(() => symlinkAsync(source, destination, type))
+}
+
 function mkdirp(directory: string): void {
   const dirPath = path.resolve(directory).replace(/\/$/, '').split(path.sep);
   for (let i = 1; i <= dirPath.length; i++) {
@@ -94,4 +116,4 @@ function mkdirp(directory: string): void {
   }
 }
 
-export { globFiles, mkdirp, clean, copyFiles }
+export { globFiles, mkdirp, clean, copyFiles, symlinkDir }
