@@ -208,7 +208,6 @@ describe('symlink', () => {
 
   it('should link source directory to dest directory.', async() => {
     await symlinkDir('src/dir', 'dest/dir/a-symlink');
-    mock.restore()
 
     expect(fs.existsSync(path.resolve('dest/dir/a-symlink')));
   })
@@ -218,7 +217,6 @@ describe('symlink', () => {
 
     await symlinkDir(src, dest);
     await symlinkDir(src, dest);
-    mock.restore()
 
     expect(fs.existsSync(path.resolve('dest/dir/a-symlink')));
   })
