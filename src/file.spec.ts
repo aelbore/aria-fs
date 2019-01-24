@@ -189,36 +189,29 @@ describe('copyFiles', () => {
 
 describe('symlink', () => {
 
-  beforeEach(() => {
-    mock({
-      ...MOCK_DATA_DIRS,
-      'src/dir': { 
-        'file.txt': 'Hello World'
-      },
-      'dest/dir': { },
-      'to-be-remove/folder': { 
-        'file.js': 'adasd'
-      }
-    })
+  beforeEach(async () => {
+    await Promise.all([ mkdirp('.tmp/dir'), mkdirp('dest/dir') ])
   })
 
-  afterEach(() => {
-    mock.restore();
+  afterEach(async() => {
+    await Promise.all([ clean('.tmp'), clean('dest') ])
   })
 
   it('should link source directory to dest directory.', async() => {
-    await symlinkDir('src/dir', 'dest/dir/a-symlink');
+    await symlinkDir('.tmp/dir', 'dest/dir/a-symlink');
 
-    expect(fs.existsSync(path.resolve('dest/dir/a-symlink')));
+    expect(path.resolve(fs.readlinkSync('dest/dir/a-symlink')))
+      .equal(path.resolve('.tmp/dir'))
   })
 
   it('should unlink the existing symlink, then create symlink', async() => {
-    const src = 'src/dir', dest = 'dest/dir/a-symlink';
+    const src = '.tmp/dir', dest = 'dest/dir/a-symlink';
 
     await symlinkDir(src, dest);
     await symlinkDir(src, dest);
 
-    expect(fs.existsSync(path.resolve('dest/dir/a-symlink')));
+    expect(path.resolve(fs.readlinkSync('dest/dir/a-symlink')))
+      .equal(path.resolve('.tmp/dir'))
   })
 
 })
