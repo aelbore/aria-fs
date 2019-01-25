@@ -4,7 +4,7 @@ import * as mock from 'mock-fs';
 import * as sinon from 'sinon';
 
 import { expect } from 'chai';
-import { globFiles, mkdirp, clean, copyFiles, symlinkDir } from './file';
+import { globFiles, mkdirp, clean, copyFiles, unlinkDir, symlinkDir } from './file';
 
 const MOCK_DATA_DIRS = {
   "src/app": {
@@ -187,31 +187,64 @@ describe('copyFiles', () => {
   })
 })
 
-describe('symlink', () => {
+describe('unlinkDir', () => {
 
   beforeEach(async () => {
     await Promise.all([ mkdirp('.tmp/dir'), mkdirp('dest/dir') ])
   })
 
   afterEach(async() => {
+    await sinon.restore();
     await Promise.all([ clean('.tmp'), clean('dest') ])
   })
 
-  it('should link source directory to dest directory.', async() => {
-    await symlinkDir('.tmp/dir', 'dest/dir/a-symlink');
+  it('should unlink remove/delete existing folder', async () => {
+    const dest = path.resolve('dest/dir');
 
-    expect(path.resolve(fs.readlinkSync('dest/dir/a-symlink')))
-      .equal(path.resolve('.tmp/dir'))
+    await unlinkDir(dest);
+
+    expect(fs.existsSync(dest)).to.false;
   })
 
-  it('should unlink the existing symlink, then create symlink', async() => {
-    const src = '.tmp/dir', dest = 'dest/dir/a-symlink';
+  it('should unlink existing symboliclink folder', async () => {
+    const src = path.resolve('.tmp/dir');
+    const dest = path.resolve('dest/dir');
 
-    await symlinkDir(src, dest);
-    await symlinkDir(src, dest);
+    await clean(dest);
+    fs.symlinkSync(src, dest, 'dir');
 
-    expect(path.resolve(fs.readlinkSync('dest/dir/a-symlink')))
-      .equal(path.resolve('.tmp/dir'))
+    await unlinkDir(dest);
+
+    expect(fs.existsSync(dest)).to.be.false;
+  })
+
+  it('should not unlink or delete not not existing folder.', async () => {
+    const existStub = sinon.stub(fs, 'existsSync').returns(false);
+
+    await unlinkDir('dest/dir');
+
+    expect(existStub.called).to.be.true;
+  })
+
+})
+
+describe('symlinkDir', () => {
+  const SRC = '.tmp/dir', DEST = 'dest/dir';
+
+  beforeEach(async () => {
+    await Promise.all([ mkdirp(SRC), mkdirp(DEST) ])
+  })
+
+  afterEach(async() => {
+    await Promise.all([ clean(path.dirname(SRC)), clean(path.dirname(DEST)) ])
+  })
+  
+  it('should create symboliclink.', async () => { 
+    const dest = path.resolve(DEST);
+    
+    await symlinkDir(SRC, dest);
+
+    expect(fs.lstatSync(dest).isSymbolicLink()).to.be.true;
   })
 
 })
