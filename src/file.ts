@@ -99,11 +99,20 @@ async function copyFiles(src: string | string[], destRootDir: string): Promise<v
  */
 async function symlinkDir(src: string, dest: string, type = LINK_TYPE.DIR): Promise<void> {
   const source = path.resolve(src), destination = path.resolve(dest);
-  return ((fs.existsSync(destination) && fs.statSync(destination).isDirectory())
-    ? (path.resolve(fs.readlinkSync(destination)) === source) 
-      ? unlinkAsync(destination): clean(destination)
-    : Promise.resolve()
-  ).then(() => symlinkAsync(source, destination, type))
+  return unlinkDir(destination).then(() => symlinkAsync(source, destination, type))
+}
+
+async function unlinkDir(dest: string): Promise<void> {
+  const destination = path.resolve(dest);
+  if (fs.existsSync(destination)) {
+    const stat = fs.lstatSync(destination);
+    if (stat.isDirectory()) {
+      await clean(destination)
+    }
+    if (stat.isSymbolicLink()) {
+      await fs.unlinkSync(destination);
+    }
+  }
 }
 
 function mkdirp(directory: string): void {
@@ -116,4 +125,4 @@ function mkdirp(directory: string): void {
   }
 }
 
-export { globFiles, mkdirp, clean, copyFiles, symlinkDir }
+export { globFiles, mkdirp, clean, copyFiles, symlinkDir, unlinkDir }
