@@ -218,7 +218,7 @@ describe('unlinkDir', () => {
     expect(fs.existsSync(dest)).to.be.false;
   })
 
-  it('should not unlink or delete not not existing folder.', async () => {
+  it('should not unlink or delete not existing folder.', async () => {
     const existStub = sinon.stub(fs, 'existsSync').returns(false);
 
     await unlinkDir('dest/dir');
@@ -229,7 +229,9 @@ describe('unlinkDir', () => {
 })
 
 describe('symlinkDir', () => {
-  const SRC = '.tmp/dir', DEST = 'dest/dir';
+  const SRC = '.tmp/dir', 
+    DEST = 'dest/dir', 
+    sanbox = sinon.createSandbox()
 
   beforeEach(async () => {
     await Promise.all([ mkdirp(SRC), mkdirp(DEST) ])
@@ -237,11 +239,22 @@ describe('symlinkDir', () => {
 
   afterEach(async() => {
     await Promise.all([ clean(path.dirname(SRC)), clean(path.dirname(DEST)) ])
+    await sanbox.restore()
   })
   
   it('should create symboliclink.', async () => { 
     const dest = path.resolve(DEST);
     
+    await symlinkDir(SRC, dest);
+
+    expect(fs.lstatSync(dest).isSymbolicLink()).to.be.true;
+  })
+
+  it('should create symboliclink in win32.', async () => {
+    const dest = path.resolve(DEST);
+
+    sanbox.stub(process, 'platform').value('win32');    
+
     await symlinkDir(SRC, dest);
 
     expect(fs.lstatSync(dest).isSymbolicLink()).to.be.true;

@@ -3,7 +3,7 @@ import * as util from 'util';
 import * as fs from 'fs';
 
 import { rollup } from 'rollup';
-import { clean, mkdirp } from './src/file';
+import { clean } from './src/file';
 
 import MagicString from 'magic-string';
 
