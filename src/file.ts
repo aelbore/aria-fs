@@ -91,21 +91,18 @@ async function copyFiles(src: string | string[], destRootDir: string): Promise<v
   });
 }
 
-/**
- * Create symbolic link of directory
- * @param src - source directory
- * @param dest - destination directory
- * @param type - (process.platform === 'win32') should be LINK_TYPE.JUNCTION
- */
-async function symlinkDir(src: string, dest: string, type = LINK_TYPE.DIR): Promise<void> {
+async function symlinkDir(src: string, dest: string): Promise<void> {
   const source = path.resolve(src), destination = path.resolve(dest);
-  return unlinkDir(destination).then(() => symlinkAsync(source, destination, type))
+  return unlinkDir(destination).then(() => {
+    return symlinkAsync(source, destination, 
+      (process.platform === 'win32') ? LINK_TYPE.JUNCTION: LINK_TYPE.DIR) 
+  })
 }
 
 async function unlinkDir(dest: string): Promise<void> {
   const destination = path.resolve(dest);
   if (fs.existsSync(destination)) {
-    const stat = fs.lstatSync(destination);
+    const stat = await lstatAsync(destination);
     if (stat.isDirectory()) {
       await clean(destination)
     }
