@@ -14,40 +14,52 @@ const copyFileAsync = util.promisify(fs.copyFile)
 const writeFileAsync = util.promisify(fs.writeFile)
 const renameAsync = util.promisify(fs.rename);
 
-const rollupConfig = {
-  inputOptions: {
-    treeshake: true,
-    input: 'src/file.ts',
-    external: [ 'fs', 'util', 'path', 'minimatch' ],
-    plugins: [
-      typescript2({
-        tsconfigDefaults: { 
-          compilerOptions: { 
-            target: 'es6', 
-            module: 'es2015', 
-            declaration: true
-          },
-          include: [ 'src/file.ts' ]
-        },
-        check: false,
-        cacheRoot: path.join(path.resolve(), 'node_modules/.tmp/.rts2_cache'), 
-        useTsconfigDeclarationDir: false
-      }),
-      resolve(),
-      stripCode()
-    ],
-    onwarn (warning) {
-      if (warning.code === 'THIS_IS_UNDEFINED') { return; }
-      console.log("Rollup warning: ", warning.message);
-    }
-  },
-  outputOptions: {
-    sourcemap: false,
-    exports: 'named',
-    file: 'dist/aria-fs.js',
-    name: 'aria-fs', 
-    format: 'cjs'
-  }
+const DEST_FOLDER = 'dist';
+const ENTRY_FILE = 'src/file.ts'
+const MODULE_NAME = 'aria-fs';
+
+const createConfig = () => {
+  return [ 'cjs', 'es' ].map(format => {
+    const file = (format === 'es') 
+      ? path.join(DEST_FOLDER, `${MODULE_NAME}.es.js`)
+      : path.join(DEST_FOLDER, `${MODULE_NAME}.js`)
+
+    return {
+      inputOptions: {
+        treeshake: true,
+        input: ENTRY_FILE,
+        external: [ 'fs', 'util', 'path', 'minimatch' ],
+        plugins: [
+          typescript2({
+            tsconfigDefaults: { 
+              compilerOptions: { 
+                target: 'es6', 
+                module: 'es2015', 
+                declaration: true
+              },
+              include: [ ENTRY_FILE ]
+            },
+            check: false,
+            cacheRoot: path.join(path.resolve(), 'node_modules/.tmp/.rts2_cache'), 
+            useTsconfigDeclarationDir: (format === 'es') ? true: false
+          }),
+          resolve(),
+          stripCode()
+        ],
+        onwarn (warning) {
+          if (warning.code === 'THIS_IS_UNDEFINED') { return; }
+          console.log("Rollup warning: ", warning.message);
+        }
+      },
+      outputOptions: {
+        sourcemap: false,
+        exports: 'named',
+        file: file,
+        name: MODULE_NAME, 
+        format: format
+      }
+    }    
+  })
 }
 
 function stripCode () {
@@ -76,7 +88,7 @@ async function rollupBuild({ inputOptions, outputOptions }): Promise<any> {
 }
 
 clean('dist')
-  .then(() => rollupBuild(rollupConfig))
+  .then(() => Promise.all(createConfig().map(config => rollupBuild(config))))
   .then(() => {
     return Promise.all([ 
       copyPackageFile(), 
