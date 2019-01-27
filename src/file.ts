@@ -18,11 +18,11 @@ interface GlobFileOptions {
   pattern: string;
 }
 
-enum LINK_TYPE {
-  FILE = 'file',
-  DIR = 'dir',
-  JUNCTION = 'junction'
-}
+const LINK_TYPE = Object.freeze({
+  FILE: 'file',
+  DIR: 'dir',
+  JUNCTION: 'junction'
+})
 
 async function walkAsync(options: GlobFileOptions): Promise<string[]> {
   const rootDir = path.resolve(options.dir);
