@@ -4,6 +4,14 @@
 
 # aria-fs
 
+Installation
+------------
+
+    npm install --save aria-fs
+
+Usage
+-----
+
 * `globFiles` - return promise of string array of file paths matching one or more globs.
   - `globFiles(<globs>): Promise<string>`
   <br />
