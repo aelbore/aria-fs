@@ -3,3 +3,15 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 # aria-fs
+
+* `globFiles` - return promise of string array of file paths matching one or more globs.
+  - `globFiles(<globs>): Promise<string>`
+  <br />
+  
+  ```js
+  const { globFiles } = require('aria-fs');
+
+  (async function(){
+    const files = await globFiles('src/**/*.ts');
+  })();
+  ```
