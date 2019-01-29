@@ -24,3 +24,14 @@ Usage
     const files = await globFiles('src/**/*.ts');
   })();
   ```
+* `clean` - remove/delete directory and files matching the dir path.
+  - `clean(<dir>): Promise<void>`
+  <br />
+  
+  ```js
+  const { clean } = require('aria-fs');
+
+  (async function(){
+    await clean('dist');
+  })();
+  ```
