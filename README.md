@@ -35,3 +35,11 @@ Usage
     await clean('dist');
   })();
   ```
+* `mkdirp` - recursively create directory.
+  - `mkdirp(<dir>): void`
+  <br />
+
+  ```js
+  const { mkdirp } = require('aria-fs');
+  mkdirp('dist');
+  ```
