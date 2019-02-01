@@ -43,3 +43,14 @@ Usage
   const { mkdirp } = require('aria-fs');
   mkdirp('dist');
   ```
+* `copyFiles` - copy list of files matching the globs.
+  - `copyFiles(<globs>, <destRootDir>): Promise<void>`
+  <br />
+  
+  ```js
+  const { copyFiles } = require('aria-fs');
+
+  (async function(){
+    await copyFiles('src/**/*.ts', 'temp');
+  })
+  ```
