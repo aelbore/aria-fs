@@ -107,7 +107,7 @@ async function unlinkDir(dest: string): Promise<void> {
       await clean(destination)
     }
     if (stat.isSymbolicLink()) {
-      await fs.unlinkSync(destination);
+      await unlinkAsync(destination);
     }
   }
 }
