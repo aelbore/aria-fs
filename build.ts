@@ -33,9 +33,10 @@ const createConfig = () => {
           typescript2({
             tsconfigDefaults: { 
               compilerOptions: { 
-                target: 'es6', 
+                target: (format === 'cjs') ? 'es6': 'esNext', 
                 module: 'es2015', 
-                declaration: true
+                declaration: true,
+                noEmitHelpers: false
               },
               include: [ ENTRY_FILE ]
             },
