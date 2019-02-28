@@ -73,7 +73,7 @@ async function clean(dir: string): Promise<void> {
       if (stat.isDirectory()) {
         await clean(p)
       } else {
-        unlinkAsync(p)
+        await unlinkAsync(p)
       }
     }))
     await rmdirAsync(dir);
