@@ -1,0 +1,3 @@
+[submodule "packages/aria-mocha"]
+	path = packages/aria-mocha
+	url = https://github.com/aelbore/aria-mocha.git
