@@ -7,8 +7,7 @@
   "scripts": {
     "link.test": "ts-node --project tools/tsconfig.json tools/post.install",
     "build": "ts-node build",
-    "aria": "./packages/aria-mocha/dist/bin/aria.js",
-    "test": "npm run aria test examples --mocha --check-coverage --include-dir examples --threshold statements=50,functions=50,branches=50,lines=50",
+    "test": "./packages/aria-mocha/dist/bin/aria.js test --mocha --check-coverage --threshold statements=50,functions=50,branches=50,lines=50",
     "coveralls": "cat ./coverage/lcovonly | ./node_modules/coveralls/bin/coveralls.js"
   },
   "repository": {
