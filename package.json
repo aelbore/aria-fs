@@ -6,8 +6,8 @@
   "module": "aria-fs.es.js",
   "scripts": {
     "build": "ts-node build",
-    "test": "TS_NODE_COMPILER_OPTIONS='{ \"lib\": [ \"es2015\" ] }' nyc --reporter=lcov --reporter=text-summary mocha --require ts-node/register/type-check src/file.spec.ts",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "test": "aria test --mocha --check-coverage --threshold statements=90,functions=90,branches=90,lines=90",
+    "coveralls": "cat ./coverage/lcovonly | ./node_modules/coveralls/bin/coveralls.js"
   },
   "repository": {
     "type": "git",
@@ -22,43 +22,20 @@
   "homepage": "https://github.com/aelbore/aria-fs#readme",
   "typings": "aria-fs.d.ts",
   "devDependencies": {
-    "aria-build": "^0.0.2",
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
     "@types/mock-fs": "^3.6.30",
-    "@types/node": "^12.0.3",
-    "@types/sinon": "^7.0.12",
+    "@types/node": "^12.0.10",
+    "@types/sinon": "^7.0.13",
+    "aria-build": "^0.0.6",
+    "aria-mocha": "^0.0.2",
     "chai": "^4.2.0",
-    "coveralls": "^3.0.3",
-    "mocha": "^6.1.4",
-    "mock-fs": "^4.10.0",
-    "nyc": "^14.1.1",
+    "coveralls": "^3.0.4",
+    "mock-fs": "^4.10.1",
     "sinon": "^7.3.2",
-    "typescript": "^3.5.1"
+    "typescript": "^3.5.2"
   },
   "dependencies": {
     "minimatch": "^3.0.4"
-  },
-  "nyc": {
-    "check-coverage": true,
-    "lines": 90,
-    "functions": 90,
-    "branches": 90,
-    "exclude": [
-      "**/*.d.ts",
-      "src/**/*.spec.ts"
-    ],
-    "include": [
-      "src/**/*.ts"
-    ],
-    "require": [
-      "ts-node/register/type-check",
-      "source-map-support/register"
-    ],
-    "extension": [
-      ".ts"
-    ],
-    "cache": true,
-    "all": true
   }
 }
