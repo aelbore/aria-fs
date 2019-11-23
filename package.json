@@ -1,6 +1,6 @@
 {
   "name": "aria-fs",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "",
   "main": "aria-fs.js",
   "module": "aria-fs.es.js",
