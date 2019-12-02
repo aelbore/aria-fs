@@ -1,6 +1,6 @@
 {
   "name": "aria-fs",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "",
   "main": "aria-fs.js",
   "module": "aria-fs.es.js",
@@ -12,6 +12,7 @@
     "clean": "node ./bin/aria-fs.js clean sample",
     "link": "node ./bin/aria-fs.js link sample sample1",
     "unlink": "node ./bin/aria-fs.js unlink sample1",
+    "copy": "node ./bin/aria-fs.js copy ./coverage/**/* hello",
     "build": "aria-build -d",
     "test": "aria test --mocha --check-coverage --threshold statements=90,functions=90,branches=90,lines=90",
     "coveralls": "cat ./coverage/lcovonly | ./node_modules/coveralls/bin/coveralls.js"
