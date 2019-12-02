@@ -1,6 +1,5 @@
 
-import { symlinkDir, unlinkDir, mkdirp, clean } from './file'
-
+import { symlinkDir, unlinkDir, mkdirp, clean, copyFiles } from './file'
 
 export async function run(version: string) { 
   const program = require('sade')('aria-fs')
@@ -24,7 +23,14 @@ export async function run(version: string) {
     .example('aria-fs clean dist')
     .action(cleanHandler)
 
+  program.command('copy <src> <dest>')
+    .action(copyHandler)
+
   program.parse(process.argv)
+
+  async function copyHandler(src: string, dest: string, opts: any) {
+    await copyFiles(src, dest);
+  }
 
   async function linkHandler(src: string, dest: string, opts: any) {
     await symlinkDir(src, dest)
