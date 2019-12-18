@@ -33,7 +33,7 @@
   "devDependencies": {
     "@types/mocha": "^5.2.7",
     "@types/mock-fs": "^4.10.0",
-    "@types/node": "^13.1.7",
+    "@types/node": "^13.1.8",
     "@types/sinon": "^7.5.1",
     "aria-build": "^0.0.24",
     "aria-mocha": "^0.0.7",
