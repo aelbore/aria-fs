@@ -1,6 +1,6 @@
 {
   "name": "aria-fs",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "",
   "main": "aria-fs.js",
   "module": "aria-fs.es.js",
@@ -30,21 +30,21 @@
   "homepage": "https://github.com/aelbore/aria-fs#readme",
   "typings": "aria-fs.d.ts",
   "devDependencies": {
-    "@types/chai": "^4.2.6",
+    "@types/chai": "^4.2.7",
     "@types/mocha": "^5.2.7",
     "@types/mock-fs": "^4.10.0",
-    "@types/node": "^12.12.14",
+    "@types/node": "^12.12.21",
     "@types/sinon": "^7.5.1",
-    "aria-build": "^0.0.18",
+    "aria-build": "^0.0.21",
     "aria-mocha": "^0.0.6",
     "chai": "^4.2.0",
     "coveralls": "^3.0.9",
     "mock-fs": "^4.10.4",
     "sinon": "^7.5.0",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.4"
   },
   "dependencies": {
     "minimatch": "^3.0.4",
-    "sade": "^1.6.1"
+    "sade": "^1.7.0"
   }
 }
