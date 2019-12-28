@@ -15,7 +15,7 @@
     "copy": "node ./bin/aria-fs.js copy ./coverage/**/* hello",
     "build": "aria-build -d",
     "test": "aria-mocha --check-coverage --threshold statements=90,functions=90,branches=90,lines=90",
-    "coveralls": "cat ./coverage/lcovonly | ./node_modules/coveralls/bin/coveralls.js"
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "repository": {
     "type": "git",
@@ -33,14 +33,14 @@
     "@types/chai": "^4.2.7",
     "@types/mocha": "^5.2.7",
     "@types/mock-fs": "^4.10.0",
-    "@types/node": "^12.12.21",
+    "@types/node": "^13.1.1",
     "@types/sinon": "^7.5.1",
-    "aria-build": "^0.0.21",
+    "aria-build": "^0.0.22",
     "aria-mocha": "^0.0.6",
     "chai": "^4.2.0",
     "coveralls": "^3.0.9",
     "mock-fs": "^4.10.4",
-    "sinon": "^7.5.0",
+    "sinon": "^8.0.1",
     "typescript": "^3.7.4"
   },
   "dependencies": {
