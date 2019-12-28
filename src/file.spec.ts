@@ -64,6 +64,16 @@ describe('globFiles', () => {
     }
   })
 
+  it('should have empty results.', async () => {
+    mock({
+      'build': {}
+    })
+
+    const files = await globFiles('./build/**/*.ts');
+    expect(Array.isArray(files)).be.true;
+    expect(files.length).eq(0);
+  })
+
 })
 
 describe('mkdirp', () => {

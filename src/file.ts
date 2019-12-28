@@ -2,8 +2,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as util from 'util';
 
-const minimatch = require('minimatch');
-
 const readdirAsync = util.promisify(fs.readdir);
 const rmdirAsync = util.promisify(fs.rmdir);
 const statAsync = util.promisify(fs.stat);
@@ -25,27 +23,28 @@ const LINK_TYPE = Object.freeze({
 })
 
 async function walkAsync(options: GlobFileOptions): Promise<string[]> {
-  const rootDir = path.resolve(options.dir);
-  const directories = await readdirAsync(options.dir);
+  const rootDir = path.resolve(options.dir)
+  const directories = await readdirAsync(options.dir)
   return Promise.all(directories.map(async directory => {
     const files: string[] = [], result = path.join(rootDir, directory)
-    const stats = await statAsync(result);
+    const stats = await statAsync(result)
     if (stats.isDirectory() && options.isRecursive) {
       const values = await walkAsync({
         dir: result,
         isRecursive: options.isRecursive,
         pattern: options.pattern
-      });
+      })
       for (let i = 0; i < values.length; i++) {
-        files.push(values[i]);
+        files.push(values[i])
       }
     }
     if (stats.isFile()) {
+      const minimatch = await import('minimatch')
       if (minimatch(path.basename(result), options.pattern)) {
-        files.push(result);
+        files.push(result)
       }
     }
-    return files;
+    return files
   }))
   .then(dirs => dirs.join(',').split(','))
   .then(dirs => dirs.filter(dir => dir))
@@ -62,6 +61,7 @@ async function globFiles(src: string | string[]): Promise<string[]> {
     return walkAsync(options)
   }))
   .then(results => results.join(',').split(','))
+  .then(results => results.filter(result => result))
 }
 
 async function clean(dir: string): Promise<void> {
