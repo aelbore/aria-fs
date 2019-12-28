@@ -1,14 +1,16 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import * as util from 'util';
+import * as fs from 'fs'
+import * as path from 'path'
+import * as util from 'util'
 
-const readdirAsync = util.promisify(fs.readdir);
-const rmdirAsync = util.promisify(fs.rmdir);
-const statAsync = util.promisify(fs.stat);
-const lstatAsync = util.promisify(fs.lstat);
-const unlinkAsync = util.promisify(fs.unlink);
-const copyFileAsync = util.promisify(fs.copyFile);
-const symlinkAsync = util.promisify(fs.symlink);
+const minimatch = require('minimatch')
+
+const readdirAsync = util.promisify(fs.readdir)
+const rmdirAsync = util.promisify(fs.rmdir)
+const statAsync = util.promisify(fs.stat)
+const lstatAsync = util.promisify(fs.lstat)
+const unlinkAsync = util.promisify(fs.unlink)
+const copyFileAsync = util.promisify(fs.copyFile)
+const symlinkAsync = util.promisify(fs.symlink)
 
 interface GlobFileOptions {
   dir: string;
@@ -39,7 +41,6 @@ async function walkAsync(options: GlobFileOptions): Promise<string[]> {
       }
     }
     if (stats.isFile()) {
-      const minimatch = await import('minimatch')
       if (minimatch(path.basename(result), options.pattern)) {
         files.push(result)
       }
