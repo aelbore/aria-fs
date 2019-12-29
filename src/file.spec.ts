@@ -1,9 +1,9 @@
-import * as path from 'path';
-import * as fs from 'fs';
-import * as mock from 'mock-fs';
-import * as sinon from 'sinon';
+import * as path from 'path'
+import * as fs from 'fs'
+import * as mock from 'mock-fs'
+import * as sinon from 'sinon'
+import * as assert from 'assert'
 
-import { expect } from 'chai';
 import { globFiles, mkdirp, clean, copyFiles, unlinkDir, symlinkDir } from './file';
 
 const MOCK_DATA_DIRS = {
@@ -35,17 +35,17 @@ describe('globFiles', () => {
 
   it('should list all files in `src/elements/input` directory (not recursive).', async () => {
     const files = await globFiles('src/elements/input/*');
-    expect(files.length).equal(1);
+    assert.strictEqual(files.length, 1)
   })
 
   it('should list all files in src directory', async () => {
     const files = await globFiles('src/**/*');
-    expect(files.length).equal(11);
+    assert.strictEqual(files.length, 11)
   })
 
   it('should list all .html and .scss files.', async () => {
     const files = await globFiles([ 'src/**/*.html', 'src/**/*.scss' ]);
-    expect(files.length).equal(4);
+    assert.strictEqual(files.length, 4)
   })
 
   it('should list all .ts files', async () => {
@@ -58,10 +58,10 @@ describe('globFiles', () => {
 
     const files = await globFiles('src/**/*.ts');
     
-    expect(files.length).equal(actual.length);
-    for (let value of actual) {
-      expect(files.indexOf(value)).not.equal(-1);
-    }
+    assert.strictEqual(files.length, actual.length)
+    actual.forEach(value => {
+      assert.notStrictEqual(files.indexOf(value), -1)
+    })
   })
 
   it('should have empty results.', async () => {
@@ -70,8 +70,8 @@ describe('globFiles', () => {
     })
 
     const files = await globFiles('./build/**/*.ts');
-    expect(Array.isArray(files)).be.true;
-    expect(files.length).eq(0);
+    assert.ok(Array.isArray(files))
+    assert.strictEqual(files.length, 0)
   })
 
 })
@@ -85,21 +85,21 @@ describe('mkdirp', () => {
     const mkdirSyncStub = sinon.stub(fs, 'mkdirSync');
     mkdirp('.tmp');
 
-    expect(mkdirSyncStub.called).to.true;
+    assert.strictEqual(mkdirSyncStub.called, true)
   })
 
   it('should create multiple folders.', () => {
     const mkdirSyncStub = sinon.stub(fs, 'mkdirSync');
     mkdirp('.tmp/elements/input');
 
-    expect(mkdirSyncStub.callCount).equal(3);
+    assert.strictEqual(mkdirSyncStub.callCount, 3)
   })
 
   it('should not create existing directory.', () => {
     const mkdirSyncStub = sinon.stub(fs, 'mkdirSync');
     mkdirp('src');
     
-    expect(mkdirSyncStub.notCalled).to.true;
+    assert.strictEqual(mkdirSyncStub.notCalled, true)
   })
 
 })
@@ -126,14 +126,14 @@ describe('clean', () => {
     const existFileStub = sinon.stub(fs, 'existsSync').returns(false);
     await clean('folder-not-exist');
 
-    expect(existFileStub.called).to.true;
+    assert.strictEqual(existFileStub.called, true)
   })
 
   it('should delete folder.', async () => {    
     await clean('to-be-delete-folder');
     
     mock.restore()
-    expect(fs.existsSync("to-be-delete-folder")).to.false;
+    assert.strictEqual(fs.existsSync("to-be-delete-folder"), false)
   })
 
   it('should delete files and folders (recursive).', async () => {
@@ -142,11 +142,20 @@ describe('clean', () => {
     await clean(rootFolder)
     mock.restore()
 
-    expect(fs.existsSync(path.join(rootFolder, 'src', 'sub-dir', 'sub-dir-file.ts'))).to.false
-    expect(fs.existsSync(path.join(rootFolder, 'src', 'sub-dir'))).to.false
-    expect(fs.existsSync(path.join(rootFolder, 'src', 'file.ts'))).to.false
-    expect(fs.existsSync(path.join(rootFolder, 'src'))).to.false
-    expect(fs.existsSync(rootFolder)).to.false
+    assert.strictEqual(
+      fs.existsSync(path.join(rootFolder, 'src', 'sub-dir', 'sub-dir-file.ts')),
+      false
+    )
+    assert.strictEqual(
+      fs.existsSync(path.join(rootFolder, 'src', 'sub-dir')),
+      false
+    )
+    assert.strictEqual(
+      fs.existsSync(path.join(rootFolder, 'src', 'file.ts')),
+      false
+    )
+    assert.strictEqual(fs.existsSync(path.join(rootFolder, 'src')), false)
+    assert.strictEqual(fs.existsSync(rootFolder), false)
   })
 
 })
@@ -176,7 +185,7 @@ describe('copyFiles', () => {
   it('should copy files.', async () => {
     await copyFiles('copy-files-dir/*', 'dest-folder');
 
-    expect(fs.existsSync('dest-folder/package.json')).to.true
+    assert.strictEqual(fs.existsSync('dest-folder/package.json'), true)
   })
 
   it('should copy multiple files (recursive).', async () => {
@@ -191,9 +200,9 @@ describe('copyFiles', () => {
       ".tmp/elements/input/package.json"
     ]
 
-    for (const file of files) {
-      expect(fs.existsSync(file)).to.true;
-    }
+    files.forEach(file => {
+      assert.strictEqual(fs.existsSync(file), true)
+    })
   })
 })
 
@@ -213,7 +222,7 @@ describe('unlinkDir', () => {
 
     await unlinkDir(dest);
 
-    expect(fs.existsSync(dest)).to.false;
+    assert.strictEqual(fs.existsSync(dest), false)
   })
 
   it('should unlink existing symboliclink folder', async () => {
@@ -225,7 +234,7 @@ describe('unlinkDir', () => {
 
     await unlinkDir(dest);
 
-    expect(fs.existsSync(dest)).to.be.false;
+    assert.strictEqual(fs.existsSync(dest), false)
   })
 
   it('should not unlink or delete not existing folder.', async () => {
@@ -233,7 +242,7 @@ describe('unlinkDir', () => {
 
     await unlinkDir('dest/dir');
 
-    expect(existStub.called).to.be.true;
+    assert.strictEqual(existStub.called, true)
   })
 
 })
@@ -249,7 +258,7 @@ describe('symlinkDir', () => {
 
   afterEach(async() => {
     await Promise.all([ clean(path.dirname(SRC)), clean(path.dirname(DEST)) ])
-    await sanbox.restore()
+    sanbox.restore()
   })
   
   it('should create symboliclink.', async () => { 
@@ -257,7 +266,7 @@ describe('symlinkDir', () => {
     
     await symlinkDir(SRC, dest);
 
-    expect(fs.lstatSync(dest).isSymbolicLink()).to.be.true;
+    assert.strictEqual(fs.lstatSync(dest).isSymbolicLink(), true)
   })
 
   it('should create symboliclink in win32.', async () => {
@@ -267,7 +276,7 @@ describe('symlinkDir', () => {
 
     await symlinkDir(SRC, dest);
 
-    expect(fs.lstatSync(dest).isSymbolicLink()).to.be.true;
+    assert.strictEqual(fs.lstatSync(dest).isSymbolicLink(), true)
   })
 
 })
