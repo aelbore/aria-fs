@@ -8,6 +8,7 @@
     "aria-fs": "./bin/aria-fs.js"
   },
   "scripts": {
+    "help": "node ./bin/aria-fs.js --help",
     "mkdirp": "node ./bin/aria-fs.js mkdirp sample",
     "clean": "node ./bin/aria-fs.js clean sample",
     "link": "node ./bin/aria-fs.js link sample sample1",
@@ -30,14 +31,12 @@
   "homepage": "https://github.com/aelbore/aria-fs#readme",
   "typings": "aria-fs.d.ts",
   "devDependencies": {
-    "@types/chai": "^4.2.7",
     "@types/mocha": "^5.2.7",
     "@types/mock-fs": "^4.10.0",
     "@types/node": "^13.1.1",
     "@types/sinon": "^7.5.1",
     "aria-build": "^0.0.22",
     "aria-mocha": "^0.0.6",
-    "chai": "^4.2.0",
     "coveralls": "^3.0.9",
     "mock-fs": "^4.10.4",
     "sinon": "^8.0.1",

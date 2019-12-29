@@ -10,6 +10,29 @@ Installation
 
     npm install --save aria-fs
 
+CLI Options
+-----
+```
+  Usage
+    $ aria-fs <command> [options]
+
+  Available Commands
+    link      
+    unlink    
+    mkdirp    
+    clean     
+    copy      
+
+  For more info, run any command with the `--help` flag
+    $ aria-fs link --help
+    $ aria-fs unlink --help
+
+  Options
+    -t, --type       Type of symlink (file, directory)  (default dir)
+    -v, --version    Displays current version
+    -h, --help       Displays this message
+```
+
 Usage
 -----
 
