@@ -12,32 +12,36 @@ const unlinkAsync = util.promisify(fs.unlink)
 const copyFileAsync = util.promisify(fs.copyFile)
 const symlinkAsync = util.promisify(fs.symlink)
 
-interface GlobFileOptions {
-  dir: string;
-  isRecursive: boolean;
-  pattern: string;
-}
-
 const LINK_TYPE = Object.freeze({
   FILE: 'file',
   DIR: 'dir',
   JUNCTION: 'junction'
 })
 
+export interface GlobFileOptions {
+  dir: string;
+  isRecursive: boolean;
+  pattern: string;
+  relative?: boolean
+}
+
 async function walkAsync(options: GlobFileOptions): Promise<string[]> {
-  const rootDir = path.resolve(options.dir)
+  const { resolve, relative, sep, join } = path
+  const rootDir = resolve(options.dir)
   const directories = await readdirAsync(options.dir)
   return Promise.all(directories.map(async directory => {
-    const files: string[] = [], result = path.join(rootDir, directory)
+    const files: string[] = [], result = join(rootDir, directory)
     const stats = await statAsync(result)
     if (stats.isDirectory() && options.isRecursive) {
       const values = await walkAsync({
-        dir: result,
-        isRecursive: options.isRecursive,
-        pattern: options.pattern
+        ...options,
+        dir: result
       })
       for (let i = 0; i < values.length; i++) {
-        files.push(values[i])
+        const value = options.relative 
+            ? '.' + sep + relative(resolve(), values[i])
+            : values[i]  
+        files.push(value)
       }
     }
     if (stats.isFile()) {
@@ -51,13 +55,14 @@ async function walkAsync(options: GlobFileOptions): Promise<string[]> {
   .then(dirs => dirs.filter(dir => dir))
 }
 
-async function globFiles(src: string | string[]): Promise<string[]> {
+async function globFiles(src: string | string[], relative?: boolean): Promise<string[]> {
   const files: string[] = Array.isArray(src) ? src : [ src ];
   return Promise.all(files.map(file => {
     const options: GlobFileOptions = {
       dir: path.dirname(path.resolve(file).replace(path.sep + '**', '')),
       isRecursive: file.includes('**'),
-      pattern: path.basename(file)
+      pattern: path.basename(file),
+      relative
     }
     return walkAsync(options)
   }))

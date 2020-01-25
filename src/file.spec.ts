@@ -49,18 +49,41 @@ describe('globFiles', () => {
   })
 
   it('should list all .ts files', async () => {
-    const appDir = [ `app.element.ts`, `index.ts` ]
-      .map(file => path.resolve(`src/app/${file}`));
-    const elementsDir = [ "index.ts", "input.element.ts", "input.element.spec.ts" ]
-      .map(file => path.resolve(`src/elements/input/src/${file}`));
+    const appFiles = [ 'app.element.ts', 'index.ts' ].map(file => `src/app/${file}`)
+    const appDir = appFiles.map(file => path.resolve(file))
+
+    const elementFiles = [ 
+      "index.ts", 
+      "input.element.ts", 
+      "input.element.spec.ts" 
+    ].map(file => `src/elements/input/src/${file}`)
+    const elementsDir = elementFiles.map(file => path.resolve(file))
 
     const actual = appDir.concat(elementsDir);
-
     const files = await globFiles('src/**/*.ts');
     
     expect(files.length).equal(actual.length)
     actual.forEach(value => {
       expect(files.indexOf(value)).notEqual(-1)
+    })
+  })
+
+  it('should list all .ts files output relative path', async () => {
+    const appFiles = [ 
+      'app.element.ts', 'index.ts' 
+    ].map(file => `./src/app/${file}`)
+    const elementFiles = [ 
+      "index.ts", 
+      "input.element.ts", 
+      "input.element.spec.ts" 
+    ].map(file => `./src/elements/input/src/${file}`)
+
+    const actual = appFiles.concat(elementFiles);
+    const files = await globFiles('src/**/*.ts', true);
+    
+    expect(files.length).equal(actual.length)
+    actual.forEach(file => {
+      expect(files.indexOf(file)).notEqual(-1)
     })
   })
 

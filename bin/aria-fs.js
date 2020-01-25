@@ -23,6 +23,7 @@ delete compilerOptions.exclude
 delete compilerOptions.include
 
 require('ts-node').register({
+  typeCheck: false,
   compilerOptions: {
     ...compilerOptions,
     ...tsconfigDefaults
@@ -30,5 +31,4 @@ require('ts-node').register({
 })
 
 const pkg = require('../package.json')
-
 require('../src').run(pkg.version)
