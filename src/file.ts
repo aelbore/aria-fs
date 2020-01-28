@@ -32,21 +32,23 @@ async function walkAsync(options: GlobFileOptions): Promise<string[]> {
   return Promise.all(directories.map(async directory => {
     const files: string[] = [], result = join(rootDir, directory)
     const stats = await statAsync(result)
+    const transformPath = (value: string) => {
+      return options.relative 
+        ? '.' + sep + relative(resolve(), value)
+        : value
+    }
     if (stats.isDirectory() && options.isRecursive) {
       const values = await walkAsync({
         ...options,
         dir: result
       })
       for (let i = 0; i < values.length; i++) {
-        const value = options.relative 
-            ? '.' + sep + relative(resolve(), values[i])
-            : values[i]  
-        files.push(value)
+        files.push(transformPath(values[i]))
       }
     }
     if (stats.isFile()) {
       if (minimatch(path.basename(result), options.pattern)) {
-        files.push(result)
+        files.push(transformPath(result))
       }
     }
     return files
@@ -105,17 +107,30 @@ async function symlinkDir(src: string, dest: string): Promise<void> {
   })
 }
 
+async function symlinkFile(src: string, dest: string): Promise<void> {
+  const source = path.resolve(src), destination = path.resolve(dest)
+  await unlinkDir(destination)
+  await symlinkAsync(source, destination, LINK_TYPE.FILE)
+}
+
 async function unlinkDir(dest: string): Promise<void> {
-  const destination = path.resolve(dest);
+  const destination = path.resolve(dest)
   if (fs.existsSync(destination)) {
-    const stat = await lstatAsync(destination);
+    const stat = await lstatAsync(destination)
     if (stat.isDirectory()) {
       await clean(destination)
     }
+    if (stat.isFile()) {
+      await unlinkAsync(dest)
+    }
     if (stat.isSymbolicLink()) {
-      await unlinkAsync(destination);
+      await unlinkAsync(destination)
     }
   }
+}
+
+async function unlinkFile(dest: string): Promise<void> {
+  await unlinkDir(dest)
 }
 
 function mkdirp(directory: string): void {
@@ -128,4 +143,4 @@ function mkdirp(directory: string): void {
   }
 }
 
-export { globFiles, mkdirp, clean, copyFiles, symlinkDir, unlinkDir }
+export { globFiles, mkdirp, clean, copyFiles, symlinkDir, unlinkDir, unlinkFile, symlinkFile }
