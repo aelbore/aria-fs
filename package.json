@@ -2,18 +2,11 @@
   "name": "aria-fs",
   "version": "0.1.0",
   "description": "",
-  "main": "aria-fs.js",
-  "module": "aria-fs.es.js",
   "bin": {
     "aria-fs": "./bin/aria-fs.js"
   },
   "scripts": {
     "help": "node ./bin/aria-fs.js --help",
-    "mkdirp": "node ./bin/aria-fs.js mkdirp sample",
-    "clean": "node ./bin/aria-fs.js clean sample",
-    "link": "node ./bin/aria-fs.js link sample sample1",
-    "unlink": "node ./bin/aria-fs.js unlink sample1",
-    "copy": "node ./bin/aria-fs.js copy ./coverage/**/* hello",
     "build": "aria-build -d",
     "test": "aria-mocha --check-coverage --threshold statements=90,functions=90,branches=90,lines=90",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
@@ -35,23 +28,25 @@
     "url": "https://github.com/aelbore/aria-fs/issues"
   },
   "homepage": "https://github.com/aelbore/aria-fs#readme",
-  "typings": "aria-fs.d.ts",
   "peerDependencies": {
     "aria-build": ">= ^0.1.0",
     "aria-mocha": ">= ^0.1.0"
   },
   "devDependencies": {
+    "@types/minimatch": "^3.0.3",
     "@types/mocha": "^5.2.7",
     "@types/mock-fs": "^4.10.0",
     "@types/node": "^13.5.0",
     "@types/sinon": "^7.5.1",
+    "aria-build": "^0.1.0",
+    "aria-fs": "^0.1.0",
+    "aria-mocha": "^0.1.0",
     "coveralls": "^3.0.9",
-    "mock-fs": "^4.10.4",
+    "mock-fs": "git+https://github.com/tschaub/mock-fs.git",
     "sinon": "^8.1.1",
     "typescript": "^3.7.4"
   },
   "dependencies": {
-    "minimatch": "^3.0.4",
-    "sade": "^1.7.0"
+    "minimatch": "^3.0.4"
   }
 }
