@@ -7,31 +7,10 @@
 
 Installation
 ------------
-
+  ```
     npm install --save aria-fs
+  ```
 
-CLI Options
------
-```
-  Usage
-    $ aria-fs <command> [options]
-
-  Available Commands
-    link      
-    unlink    
-    mkdirp    
-    clean     
-    copy      
-
-  For more info, run any command with the `--help` flag
-    $ aria-fs link --help
-    $ aria-fs unlink --help
-
-  Options
-    -t, --type       Type of symlink (file, directory)  (default dir)
-    -v, --version    Displays current version
-    -h, --help       Displays this message
-```
 
 Usage
 -----
@@ -41,7 +20,7 @@ Usage
   <br />
   
   ```js
-  const { globFiles } = require('aria-fs');
+  import { globFiles } from 'aria-fs';
 
   (async function(){
     const files = await globFiles('src/**/*.ts');
@@ -52,7 +31,7 @@ Usage
   <br />
   
   ```js
-  const { clean } = require('aria-fs');
+  import { clean } from 'aria-fs';
 
   (async function(){
     await clean('dist');
@@ -63,7 +42,8 @@ Usage
   <br />
 
   ```js
-  const { mkdirp } = require('aria-fs');
+  import { mkdirp } from 'aria-fs';
+
   mkdirp('dist');
   ```
 * `copyFiles` - copy list of files matching the globs.
@@ -71,9 +51,9 @@ Usage
   <br />
   
   ```js
-  const { copyFiles } = require('aria-fs');
+  import { copyFiles } from 'aria-fs';
 
   (async function(){
     await copyFiles('src/**/*.ts', 'temp');
-  })
+  })()
   ```
