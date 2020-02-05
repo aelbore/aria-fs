@@ -83,7 +83,8 @@ describe('globFiles', () => {
     
     expect(files.length).equal(actual.length)
     actual.forEach(file => {
-      expect(files.indexOf(file)).notEqual(-1)
+      const value = files.find(value => path.normalize(value) === path.normalize(file))
+      expect(value).toBeDefined()
     })
   })
 
