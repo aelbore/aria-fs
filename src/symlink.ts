@@ -7,8 +7,8 @@ type SymlinkType = 'file' | 'dir' | 'junction'
 async function symlink(src: string, dest: string, type?: SymlinkType) {
   const source = resolve(src), destination = resolve(dest)
   await unlink(destination)
-  await promises.symlink(source, destination, 
-    (process.platform === 'win32') ? 'junction': type) 
+  await promises.symlink(source, destination,
+    (process.platform.includes('win32') && type.includes('dir')) ? 'junction': type) 
 }
 
 async function unlink(dest: string) {
