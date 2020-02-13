@@ -22,7 +22,13 @@
     "type": "git",
     "url": "git+https://github.com/aelbore/aria-fs.git"
   },
-  "keywords": [],
+  "keywords": [
+    "fs",
+    "glob",
+    "files",
+    "mkdir",
+    "async"
+  ],
   "author": "Arjay Elbore",
   "license": "ISC",
   "bugs": {
