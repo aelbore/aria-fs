@@ -7,7 +7,7 @@ branches:
   - master
 before_install:
   - npm install -g yarn --cache-min 999999999
-  - yarn add aria-build aria-mocha --dev
+  - yarn add aria-build aria-mocha aria-fs --dev
 install: 
   - yarn install
 script:
