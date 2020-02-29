@@ -33,12 +33,12 @@
     "@types/minimatch": "^3.0.3",
     "@types/mocha": "^7.0.1",
     "@types/mock-fs": "^4.10.0",
-    "@types/node": "^13.7.0",
-    "@types/sinon": "^7.5.1",
+    "@types/node": "^13.7.6",
+    "@types/sinon": "^7.5.2",
     "coveralls": "^3.0.9",
-    "mock-fs": "git+https://github.com/tschaub/mock-fs.git",
-    "sinon": "^8.1.1",
-    "typescript": "^3.7.4"
+    "mock-fs": "^4.11.0",
+    "sinon": "^9.0.0",
+    "typescript": "^3.8.2"
   },
   "dependencies": {
     "minimatch": "^3.0.4"
