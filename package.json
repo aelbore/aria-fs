@@ -1,10 +1,10 @@
 {
   "name": "aria-fs",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "",
   "scripts": {
     "build": "aria-build -d",
-    "test": "aria-mocha --check-coverage --threshold statements=90,functions=90,branches=90,lines=90",
+    "test": "aria-mocha --check-coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "repository": {
@@ -25,8 +25,8 @@
   },
   "homepage": "https://github.com/aelbore/aria-fs#readme",
   "peerDependencies": {
-    "aria-build": ">= ^0.2.2",
-    "aria-mocha": ">= ^0.2.2"
+    "aria-build": ">= ^0.3.0",
+    "aria-mocha": ">= ^0.3.0"
   },
   "devDependencies": {
     "@types/minimatch": "^3.0.3",
