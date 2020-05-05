@@ -1,7 +1,16 @@
 sudo: required
 dist: trusty
 language: node_js
-node_js: '13.13.0'
+node_js:
+  - '12.16.3'
+  - '13.14.0'
+  - '14.0.0'
+os:
+  - windows
+  - linux
+  - osx
+env:
+  - YARN_GPG=no
 branches:
   only:
   - master
@@ -13,4 +22,4 @@ install:
 script:
   - yarn build && yarn test
 after_success:
-  - yarn coveralls
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then yarn coveralls; fi

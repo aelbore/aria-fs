@@ -20,7 +20,7 @@ function createOptions(file: string, relative: boolean) {
   return options 
 } 
 
-async function walk(options: GlobFileOptions) { 
+async function walk(options: GlobFileOptions) { 
   const rootDir = resolve(), { dir, isRecursive, pattern } = options
   const folders = await promises.readdir(dir, { withFileTypes: true }) 
   const files = await Promise.all(folders.map(folder => { 
@@ -29,12 +29,10 @@ async function walk(options: GlobFileOptions) { 
       return walk({ ...options, dir: res }) 
     } 
     if (folder.isFile() && minimatch(basename(res), pattern)) { 
-      return (options.relative 
-        ? options.relative ? `.${sep}${relative(rootDir, res)}` : resolve(res) 
-        : join(rootDir, res)) 
+      return (options.relative  ? `.${sep}${relative(rootDir, res)}` : join(rootDir, res)) 
     }
   }))
-  return Array.prototype.concat(...files.filter((files:string[]) => files)) 
+  return Array.prototype.concat(...files.filter((files:string[]) => files)) 
 } 
 
 export async function globFiles(src: string | string[], relative: boolean = false) {
@@ -43,5 +41,6 @@ export async function globFiles(src: string | string[], relative: boolean = fals
     const options = createOptions(file, relative)
     return walk(options)
   }))
-  return result.join(',').split(',').filter(value => value)
+  // @ts-ignore
+  return result.flat().filter(value => value)
 }
