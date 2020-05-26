@@ -1,6 +1,6 @@
 {
   "name": "aria-fs",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "",
   "scripts": {
     "build": "aria-build -d",
@@ -19,7 +19,7 @@
     "async"
   ],
   "author": "Arjay Elbore",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/aelbore/aria-fs/issues"
   },
