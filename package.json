@@ -1,6 +1,6 @@
 {
   "name": "aria-fs",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "",
   "scripts": {
     "build": "aria-build -d",
@@ -28,7 +28,7 @@
     "@types/minimatch": "^3.0.3",
     "@types/mocha": "^7.0.2",
     "@types/mock-fs": "^4.10.0",
-    "@types/node": "^14.0.5",
+    "@types/node": "^14.0.6",
     "@types/sinon": "^9.0.4",
     "coveralls": "^3.1.0",
     "mock-fs": "^4.12.0",
