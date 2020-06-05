@@ -1,7 +1,7 @@
 {
   "name": "aria-fs",
-  "version": "0.4.1",
-  "description": "",
+  "version": "0.4.3",
+  "description": "Asynchronous Nodejs FileSystem",
   "scripts": {
     "build": "aria-build -d",
     "test": "aria-mocha --check-coverage",
