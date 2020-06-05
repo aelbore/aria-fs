@@ -28,12 +28,12 @@
     "@types/minimatch": "^3.0.3",
     "@types/mocha": "^7.0.2",
     "@types/mock-fs": "^4.10.0",
-    "@types/node": "^14.0.6",
+    "@types/node": "^14.0.11",
     "@types/sinon": "^9.0.4",
     "coveralls": "^3.1.0",
     "mock-fs": "^4.12.0",
     "sinon": "^9.0.2",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.5"
   },
   "dependencies": {
     "minimatch": "^3.0.4"
