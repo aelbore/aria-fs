@@ -1,6 +1,6 @@
 {
   "name": "aria-fs",
-  "version": "0.4.3",
+  "version": "0.4.5",
   "description": "Asynchronous Nodejs FileSystem",
   "scripts": {
     "build": "aria-build -d",
@@ -18,7 +18,7 @@
     "mkdir",
     "async"
   ],
-  "author": "Arjay Elbore",
+  "author": "Arjay Elbore <aelbore.sg@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/aelbore/aria-fs/issues"
