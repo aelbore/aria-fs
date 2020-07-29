@@ -16,7 +16,7 @@ describe('unlink', () => {
   })
 
   afterEach(async() => {
-    await sinon.restore()
+    sinon.restore()
     await Promise.all([ clean('.tmp'), clean('dest') ])
   })
 

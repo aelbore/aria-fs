@@ -1,7 +1,7 @@
 import { relative, sep, join, resolve, basename, normalize } from 'path'
 import { promises } from 'fs'
 
-const minimatch = require('minimatch')
+import { isMatch } from 'picomatch'
 
 type GlobFileOptions = {
   dir: string;
@@ -22,13 +22,13 @@ function createOptions(file: string, relative: boolean) {
 
 async function walk(options: GlobFileOptions) { 
   const rootDir = resolve(), { dir, isRecursive, pattern } = options
-  const folders = await promises.readdir(dir, { withFileTypes: true }) 
+  const folders = await promises.readdir(dir, { withFileTypes: true }) 
   const files = await Promise.all(folders.map(folder => { 
     const res = join(options.dir, folder.name) 
     if (folder.isDirectory() && isRecursive) { 
       return walk({ ...options, dir: res }) 
     } 
-    if (folder.isFile() && minimatch(basename(res), pattern)) { 
+    if (folder.isFile() && isMatch(basename(res), pattern)) { 
       return (options.relative  ? `.${sep}${relative(rootDir, res)}` : join(rootDir, res)) 
     }
   }))

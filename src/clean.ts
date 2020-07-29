@@ -3,16 +3,17 @@ import { promises, existsSync } from 'fs'
 
 export async function clean(dir: string) {
   if (existsSync(dir)) {
-    const files = await promises.readdir(dir)
+    const { readdir, lstat, unlink, rmdir } = promises
+    const files = await readdir(dir)
     await Promise.all(files.map(async file => {
       const p = join(dir, file)
-      const stat = await promises.lstat(p)
+      const stat = await lstat(p)
       if (stat.isDirectory()) {
         await clean(p)
       } else {
-        await promises.unlink(p)
+        await unlink(p)
       }
     }))
-    await promises.rmdir(dir)
+    await rmdir(dir)
   }
 }

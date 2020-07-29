@@ -25,16 +25,14 @@ describe('clean', () => {
   })
 
   it('should folder not exist.', async () => {
-    const existFileStub = sinon.stub(fs, 'existsSync').returns(false);
-    await clean('folder-not-exist');
+    const existFileStub = sinon.stub(fs, 'existsSync')
+    await clean('folder-not-exist')
 
     expect(existFileStub.called).toBeTrue()
   })
 
   it('should delete folder.', async () => {    
     await clean('to-be-delete-folder');
-    
-    mock.restore()
     expect(fs.existsSync("to-be-delete-folder")).toBeFalse()
   })
 

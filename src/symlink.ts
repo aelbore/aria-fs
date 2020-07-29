@@ -14,12 +14,13 @@ async function symlink(src: string, dest: string, type?: SymlinkType) {
 async function unlink(dest: string) {
   const destination = resolve(dest)
   if (existsSync(destination)) {
-    const stat = await promises.lstat(destination)
+    const { lstat, unlink } = promises
+    const stat = await lstat(destination)
     if (stat.isDirectory()) {
       await clean(destination)
     }
     if (stat.isFile() || stat.isSymbolicLink()) {
-      await promises.unlink(dest)
+      await unlink(dest)
     }
   }
 }
