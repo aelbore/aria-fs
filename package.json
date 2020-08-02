@@ -1,6 +1,6 @@
 {
   "name": "aria-fs",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Asynchronous Nodejs FileSystem",
   "scripts": {
     "build": "aria-build -d",
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/aelbore/aria-fs#readme",
   "devDependencies": {
-    "@types/mocha": "^8.0.0",
+    "@types/mocha": "^8.0.1",
     "@types/mock-fs": "^4.10.0",
     "@types/node": "^14.0.27",
     "@types/picomatch": "^2.2.1",
