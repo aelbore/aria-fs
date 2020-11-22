@@ -1,6 +1,6 @@
 {
   "name": "aria-fs",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Asynchronous Nodejs FileSystem",
   "scripts": {
     "build": "aria-build -d",
