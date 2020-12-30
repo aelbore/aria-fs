@@ -27,9 +27,9 @@
   "devDependencies": {
     "@types/mocha": "^8.2.0",
     "@types/mock-fs": "^4.13.0",
-    "@types/node": "^14.14.14",
+    "@types/node": "^14.14.16",
     "@types/picomatch": "^2.2.1",
-    "@types/sinon": "^9.0.9",
+    "@types/sinon": "^9.0.10",
     "coveralls": "^3.1.0",
     "mock-fs": "^4.13.0",
     "sinon": "^9.2.2",
