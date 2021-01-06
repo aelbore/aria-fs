@@ -1,6 +1,6 @@
 {
   "name": "aria-fs",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "description": "Asynchronous Nodejs FileSystem",
   "scripts": {
     "build": "aria-build -d",
@@ -27,7 +27,7 @@
   "devDependencies": {
     "@types/mocha": "^8.2.0",
     "@types/mock-fs": "^4.13.0",
-    "@types/node": "^14.14.16",
+    "@types/node": "^14.14.19",
     "@types/picomatch": "^2.2.1",
     "@types/sinon": "^9.0.10",
     "coveralls": "^3.1.0",
